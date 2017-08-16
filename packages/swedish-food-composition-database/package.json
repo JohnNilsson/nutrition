@@ -1,0 +1,19 @@
+{
+  "name": "swedish-food-composition-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnNilsson/nutrition.git"
+  },
+  "author": "John Nilsson <john@milsson.nu>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnNilsson/nutrition/issues"
+  },
+  "homepage": "https://github.com/JohnNilsson/nutrition#readme"
+}
