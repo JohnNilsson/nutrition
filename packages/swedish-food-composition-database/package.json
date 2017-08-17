@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "download": "node download.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/JohnNilsson/nutrition/issues"
   },
-  "homepage": "https://github.com/JohnNilsson/nutrition#readme"
+  "homepage": "https://github.com/JohnNilsson/nutrition#readme",
+  "devDependencies": {
+    "download": "^6.2.5",
+    "progress": "^2.0.0"
+  }
 }
