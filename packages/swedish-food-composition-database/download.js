@@ -3,12 +3,12 @@ const path = require('path');
 const download = require('download');
 const ProgressBar = require('progress');
 
-const { XMLFILES } = require('./config');
+const { FILES } = require('./config');
 
-Object.keys(XMLFILES).map(name =>{
-    const xml = XMLFILES[name];
-    const uri = xml.uri;
-    const dst = xml.file;
+Object.keys(FILES).map(name =>{
+    const file = FILES[name];
+    const uri = file.uri;
+    const dst = file.xml;
 
     if(fs.existsSync(dst)){
         console.log(`Exists ${dst}`);

@@ -2,18 +2,21 @@ const path = require('path');
 
 const VERSION = '20170314';
 
-const DESTDIR = 'xml';
+const XMLDIR  = 'xml';
+const DISTDIR = 'dist';
 const BASEURI = 'http://www7.slv.se/apilivsmedel/LivsmedelService.svc';
 
-const XMLFILES = {
+const FILES = {
     Klassificering: {
-        file: path.join(DESTDIR,`Klassificering-${VERSION}.xml`),
+        xml: path.join(XMLDIR,`Klassificering-${VERSION}.xml`),
         uri: `${BASEURI}/Livsmedel/Klassificering/${VERSION}`,
+        json: path.join(DISTDIR,`Klassificering-${VERSION}.json`),
     },
     Naringsvarde: {
-        file: path.join(DESTDIR,`Naringsvarde-${VERSION}.xml`),
+        xml: path.join(XMLDIR,`Naringsvarde-${VERSION}.xml`),
         uri: `${BASEURI}/Livsmedel/Naringsvarde/${VERSION}`,
+        json: path.join(DISTDIR,`Naringsvarde-${VERSION}.json`),
     },
 };
 
-module.exports = {VERSION,DESTDIR,BASEURI,XMLFILES};
+module.exports = {VERSION,XMLDIR,DISTDIR,BASEURI,FILES};

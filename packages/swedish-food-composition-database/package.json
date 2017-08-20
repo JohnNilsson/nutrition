@@ -19,6 +19,11 @@
   "homepage": "https://github.com/JohnNilsson/nutrition#readme",
   "devDependencies": {
     "download": "^6.2.5",
+    "node-expat": "^2.3.16",
+    "ora": "^1.3.0",
     "progress": "^2.0.0"
+  },
+  "dependencies": {
+    "brotli": "^1.3.2"
   }
 }
