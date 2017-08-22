@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "download": "node download.js",
+    "build": "node ./src/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
