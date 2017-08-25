@@ -10,12 +10,16 @@ const FILES = {
     Klassificering: {
         xml: path.join(XMLDIR,`Klassificering-${VERSION}.xml`),
         uri: `${BASEURI}/Livsmedel/Klassificering/${VERSION}`,
-        json: path.join(DISTDIR,`Klassificering-${VERSION}.json`),
+        json: {
+          ['6NF']: path.join(DISTDIR,`Klassificering-${VERSION}.6NF.json`),
+        }
     },
     Naringsvarde: {
         xml: path.join(XMLDIR,`Naringsvarde-${VERSION}.xml`),
         uri: `${BASEURI}/Livsmedel/Naringsvarde/${VERSION}`,
-        json: path.join(DISTDIR,`Naringsvarde-${VERSION}.json`),
+        json: {
+          ['6NF']: path.join(DISTDIR,`Naringsvarde-${VERSION}.6NF.json`),
+        },
     },
 };
 
