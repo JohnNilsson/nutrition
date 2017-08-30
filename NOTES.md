@@ -88,5 +88,8 @@ https://github.com/teamtofu/foodweb
 https://github.com/eliashussary/nutrition-facts
 https://github.com/asbaker/node-fda-nutrient-database
 
+### Nutrition
+http://www.lakareforframtiden.se/
+
 ### Random
 https://chainpoint.org/
