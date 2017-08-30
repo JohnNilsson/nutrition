@@ -31,7 +31,6 @@ switch(algorithm){
      [32, 8],
      [64, 9],
    ].find(([ds,]) => ds >= size || ds === 64);
-   console.error('size:',size,' preset:',preset);
    compress = createCompressor({preset: preset | PRESET_EXTREME});
    break;
 
