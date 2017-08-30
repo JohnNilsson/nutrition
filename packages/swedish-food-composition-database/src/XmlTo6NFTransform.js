@@ -1,20 +1,15 @@
-const {promisify} = require('util');
-const fs = require('fs');
-const mkdir     = promisify(fs.mkdir);
-const exists    = promisify(fs.exists);
-const JSONStream = require('JSONStream')
-
-const { FILES, DISTDIR } = require('./config');
-
-const {XmlTransform} = require('./parse');
-const {spinner,step} = require('./ui');
+const XmlTransform = require('./XmlTransform');
 
 // Normalize to 6NF (using array index as id)
+// TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
 // Other variants to try:
 //   - 1NF with seperate strings table
 //   - BCNF
 //   - 5NF
 // Use https://github.com/erikolson186/relational.js or http://alasql.org/ for those
+//   - JSON-LD, is it possible to have an efficient serialization with such a model?
+//     OTOH, going with JSON-LD/RDF kind of implies that sending the entier database is not
+//     the primary concern anymore, open world an all that.
 class XmlTo6NFTransform extends XmlTransform {
 
   constructor() {
@@ -166,9 +161,6 @@ XmlTo6NFTransform.visitor = {
             }
           },
         },
-        _endElement(){
-          spinner.text = this.data.Livsmedel.Namn[this.currentFood.id];
-        }
       },
       _endElement(){
         this.push(this.data);
@@ -190,26 +182,4 @@ function id(value,array) {
   return id;
 }
 
-
-
-async function transform(){
-
-  await step('Transforming XML data to ' + FILES.Naringsvarde.json['6NF'], async () => {
-
-    if(!await exists(DISTDIR)){
-        await mkdir(DISTDIR);
-    }
-
-    return await new Promise((resolve,reject) => {
-      fs.createReadStream(FILES.Naringsvarde.xml)
-      .pipe(new XmlTo6NFTransform())
-      .pipe(JSONStream.stringify(false))
-      .pipe(fs.createWriteStream(FILES.Naringsvarde.json['6NF']))
-      .on('error',reject)
-      .on('finish',resolve);
-    });
-
-  });
-}
-
-module.exports = transform;
+module.exports = XmlTo6NFTransform;

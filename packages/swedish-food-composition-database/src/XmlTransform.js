@@ -95,4 +95,4 @@ function createParser(rootVisitor,context={}){
     return p;
 }
 
-module.exports = { XmlTransform };
+module.exports = XmlTransform;

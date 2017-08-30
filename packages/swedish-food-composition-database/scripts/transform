@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const XmlTo6NFTransform = require('../src/XmlTo6NFTransform');
+const JSONStream = require('JSONStream');
+
+process.stdin
+.pipe(new XmlTo6NFTransform())
+.pipe(JSONStream.stringify(false))
+.pipe(process.stdout);

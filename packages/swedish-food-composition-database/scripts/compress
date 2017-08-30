@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+const compressStream = require('iltorb').compressStream;
+const {fstatSync} = require('fs');
+
+process.stdin
+ .pipe(compressStream({
+    mode:       1 /*UTF-8 formatted text input*/,
+    quality:   11 /*max*/,
+    lgwin:     24 /*max*/,
+    lgblock:   24 /*max*/,
+    size_hint: fstatSync(process.stdin.fd).size,
+ }))
+ .pipe(process.stdout);
