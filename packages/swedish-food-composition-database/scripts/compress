@@ -1,14 +1,44 @@
 #!/usr/bin/env node
 
-const compressStream = require('iltorb').compressStream;
-const {fstatSync} = require('fs');
+let compress = null;
+const algorithm = process.argv[2];
+switch(algorithm){
+  case "brotli":
+    compress = require('iltorb').compressStream({
+      mode:       1 /*UTF-8 formatted text input*/,
+      quality:   11 /*max*/,
+      lgwin:     24 /*max*/,
+      lgblock:   24 /*max*/,
+      size_hint: require('fs').fstatSync(process.stdin.fd).size,
+   });
+   break;
+
+  case "snappy":
+   compress = require('snappy-stream').createCompressStream()
+   break;
+
+  case "lzma":
+   const {createCompressor,PRESET_EXTREME} = require('lzma-native');
+   const size = require('fs').fstatSync(process.stdin.fd).size / 1024 / 1024;
+   const [,preset] = [
+     // [DictSize in MiB, preset]
+     [ 0, 0],
+     [ 1, 1],
+     [ 2, 2],
+     [ 4, 4],
+     [ 8, 6],
+     [16, 7],
+     [32, 8],
+     [64, 9],
+   ].find(([ds,]) => ds >= size || ds === 64);
+   console.error('size:',size,' preset:',preset);
+   compress = createCompressor({preset: preset | PRESET_EXTREME});
+   break;
+
+  default:
+    throw new Error("Unsupported algorithm: "+ algorithm);
+}
 
 process.stdin
- .pipe(compressStream({
-    mode:       1 /*UTF-8 formatted text input*/,
-    quality:   11 /*max*/,
-    lgwin:     24 /*max*/,
-    lgblock:   24 /*max*/,
-    size_hint: fstatSync(process.stdin.fd).size,
- }))
- .pipe(process.stdout);
+  .pipe(compress)
+  .pipe(process.stdout);
