@@ -1,3 +1,6 @@
+VERSION     := 20170314
+BASE_URI    := http://www7.slv.se/apilivsmedel/LivsmedelService.svc/Livsmedel
+URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := xml/Naringsvarde.xml
 TRANSFORMS  := 6NF
 TRANSFORMED := dist/Naringsvarde.6NF.json
@@ -16,4 +19,4 @@ $(TRANSFORMED): $(XML)
 	scripts/transform < $< > $@
 
 $(XML):
-	curl http://www7.slv.se/apilivsmedel/LivsmedelService.svc/Livsmedel/Naringsvarde/20170314 --output $@
+	curl $(URI) --output $@
