@@ -13,10 +13,10 @@ COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED),
 all: $(COMPRESSED)
 
 $(COMPRESSED): $(TRANSFORMED)
-	scripts/compress $(subst .,,$(suffix $@)) < $< > $@
+	./compress $(subst .,,$(suffix $@)) < $< > $@
 
 $(TRANSFORMED): $(XML)
-	scripts/transform < $< > $@
+	./transform < $< > $@
 
 $(XML):
 	curl $(URI) --output $@
