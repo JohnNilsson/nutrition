@@ -1,19 +1,19 @@
-.PHONY : all
-all: dist/Naringsvarde.6NF.json.brotli dist/Naringsvarde.6NF.json.snappy dist/Naringsvarde.6NF.json.lzma
+XML         := xml/Naringsvarde.xml
+TRANSFORMS  := 6NF
+TRANSFORMED := dist/Naringsvarde.6NF.json
+COMPRESSION := brotli snappy lzma
+COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED),$(json).$(algorithm)))
 
+.PHONY: all
 .DELETE_ON_ERROR:
 
-dist/Naringsvarde.6NF.json.brotli: dist/Naringsvarde.6NF.json
-	scripts/compress brotli < $< > $@
+all: $(COMPRESSED)
 
-dist/Naringsvarde.6NF.json.snappy: dist/Naringsvarde.6NF.json
-	scripts/compress snappy < $< > $@
+$(COMPRESSED): $(TRANSFORMED)
+	scripts/compress $(subst .,,$(suffix $@)) < $< > $@
 
-dist/Naringsvarde.6NF.json.lzma: dist/Naringsvarde.6NF.json
-	scripts/compress lzma < $< > $@
-
-dist/Naringsvarde.6NF.json: xml/Naringsvarde.xml
+$(TRANSFORMED): $(XML)
 	scripts/transform < $< > $@
 
-xml/Naringsvarde.xml:
+$(XML):
 	curl http://www7.slv.se/apilivsmedel/LivsmedelService.svc/Livsmedel/Naringsvarde/20170314 --output $@
