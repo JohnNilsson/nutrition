@@ -1,6 +1,8 @@
 .PHONY : all
 all: dist/Naringsvarde.6NF.json.brotli dist/Naringsvarde.6NF.json.snappy dist/Naringsvarde.6NF.json.lzma
 
+.DELETE_ON_ERROR:
+
 dist/Naringsvarde.6NF.json.brotli: dist/Naringsvarde.6NF.json
 	scripts/compress brotli < $< > $@
 
