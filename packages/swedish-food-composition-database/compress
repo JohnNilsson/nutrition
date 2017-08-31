@@ -1,43 +1,52 @@
 #!/usr/bin/env node
 
-let compress = null;
-const algorithm = process.argv[2];
-switch(algorithm){
-  case "brotli":
-    compress = require('iltorb').compressStream({
-      mode:       1 /*UTF-8 formatted text input*/,
+const algorithms = {
+
+  brotli() {
+    const compress = require('iltorb').compressStream({
+      mode:      1 /*UTF-8 formatted text input*/,
       quality:   11 /*max*/,
       lgwin:     24 /*max*/,
       lgblock:   24 /*max*/,
       size_hint: require('fs').fstatSync(process.stdin.fd).size,
-   });
-   break;
+    });
+    process.stdin
+      .pipe(compress)
+      .pipe(process.stdout);
+  },
 
-  case "snappy":
-   compress = require('snappy-stream').createCompressStream()
-   break;
+  snappy() {
+    const compress = require('snappy-stream').createCompressStream();
+    process.stdin
+      .pipe(compress)
+      .pipe(process.stdout);
+  },
 
-  case "lzma":
-   const {createCompressor,PRESET_EXTREME} = require('lzma-native');
-   const size = require('fs').fstatSync(process.stdin.fd).size / 1024 / 1024;
-   const [,preset] = [
-     // [DictSize in MiB, preset]
-     [ 0, 0],
-     [ 1, 1],
-     [ 2, 2],
-     [ 4, 4],
-     [ 8, 6],
-     [16, 7],
-     [32, 8],
-     [64, 9],
-   ].find(([ds,]) => ds >= size || ds === 64);
-   compress = createCompressor({preset: preset | PRESET_EXTREME});
-   break;
+  lzma() {
+    const { createCompressor, PRESET_EXTREME } = require('lzma-native');
+    const size = require('fs').fstatSync(process.stdin.fd).size / 1024 / 1024;
+    const [, preset] = [
+      // [DictSize in MiB, preset]
+      [0, 0],
+      [1, 1],
+      [2, 2],
+      [4, 4],
+      [8, 6],
+      [16, 7],
+      [32, 8],
+      [64, 9],
+    ].find(([ds,]) => ds >= size || ds === 64);
+    const compress = createCompressor({ preset: preset | PRESET_EXTREME });
+    process.stdin
+      .pipe(compress)
+      .pipe(process.stdout);
+  }
+};
 
-  default:
-    throw new Error("Unsupported algorithm: "+ algorithm);
+
+const algorithm = algorithms[process.argv[2]];
+if (typeof algorithm === 'function') {
+  algorithm();
+} else {
+  throw new Error("Unsupported algorithm: " + algorithm);
 }
-
-process.stdin
-  .pipe(compress)
-  .pipe(process.stdout);
