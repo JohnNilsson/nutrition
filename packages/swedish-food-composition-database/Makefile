@@ -5,7 +5,7 @@ XML         := data/Naringsvarde.xml
 TRANSFORMS  := 6NF 5NF
 TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).json)
 COMPRESSION := brotli snappy lzma lzf
-COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED),$(json).$(algorithm)))
+COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED) $(XML),$(json).$(algorithm)))
 
 .PHONY: all
 .DELETE_ON_ERROR:
