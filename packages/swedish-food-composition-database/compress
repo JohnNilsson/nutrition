@@ -40,7 +40,15 @@ const algorithms = {
     process.stdin
       .pipe(compress)
       .pipe(process.stdout);
-  }
+  },
+
+  lzf(){
+    const {compress} = require('lzfjs');
+    require('get-stdin').buffer().then(data => {
+      process.stdout.write(compress(data));
+    });
+  },
+
 };
 
 

@@ -1,9 +1,25 @@
 #!/usr/bin/env node
 
+const { Transform } = require('stream');
 const XmlTo6NFTransform = require('./src/XmlTo6NFTransform');
 const JSONStream = require('JSONStream');
 
-process.stdin
-.pipe(new XmlTo6NFTransform())
-.pipe(JSONStream.stringify(false))
-.pipe(process.stdout);
+const algorithms = {
+  "6NF"(){
+    process.stdin
+    .pipe(new XmlTo6NFTransform())
+    .pipe(JSONStream.stringify(false))
+    .pipe(process.stdout);
+  },
+};
+
+
+
+const algorithm = algorithms[process.argv[2]];
+if (typeof algorithm === 'function') {
+  algorithm();
+} else {
+  throw new Error("Unsupported algorithm: " + algorithm);
+}
+
+
