@@ -7,11 +7,11 @@ TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).
 COMPRESSION := brotli snappy lzma lzf
 COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED) $(XML),$(json).$(algorithm)))
 
-.PHONY: all
+.PHONY: all tools
 .DELETE_ON_ERROR:
 .SECONDEXPANSION:
 
-all: $(COMPRESSED)
+all: npm_install $(COMPRESSED)
 
 $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
@@ -24,3 +24,9 @@ data/Naringsvarde.%.json: $(XML)
 $(XML):
 	@mkdir -p $(@D)
 	curl $(URI) --output $@
+
+npm_install: package-lock.json
+
+package-lock.json: package.json
+	npm install
+	@touch package-lock.json
