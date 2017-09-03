@@ -15,8 +15,47 @@ const encodings = {
     });
   },
 
+  "bson"(){
+    const BSON = require('bson');
+    const bson = new BSON();
+    require('get-stdin')
+    .buffer()
+    .then(b => {
+      const data = JSON.parse(b);
+      let out = bson.serialize(data);
+      process.stdout.write(out);
+    });
+  },
+
+  "cbor"(){
+    const cbor = require('borc');
+
+    require('get-stdin')
+    .buffer()
+    .then(b => {
+      const data = JSON.parse(b);
+      const out = cbor.encode(data);
+      process.stdout.write(out);
+    });
+  },
+
+  "msgpack"(){
+    var msgpack = require("msgpack-lite");
+
+    require('get-stdin')
+    .buffer()
+    .then(b => {
+      const data = JSON.parse(b);
+      const out = msgpack.encode(data);
+      process.stdout.write(out);
+    });
+  },
+
 };
 
+process.on('unhandledRejection', error => {
+  throw error;
+});
 
 
 const encoding = encodings[process.argv[2]];
