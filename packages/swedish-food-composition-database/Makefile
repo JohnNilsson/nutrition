@@ -12,14 +12,16 @@ COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED) 
 .SECONDEXPANSION:
 
 all: npm_install $(COMPRESSED)
+export PATH := .:node_modules/.bin:$(PATH)
+
 
 $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
-	./compress $(subst .,,$(suffix $@)) < $< > $@
+	compress $(subst .,,$(suffix $@)) < $< > $@
 
 data/Naringsvarde.%.json: $(XML)
 	@mkdir -p $(@D)
-	./transform $* < $< > $@
+	transform $* < $< > $@
 
 $(XML):
 	@mkdir -p $(@D)
