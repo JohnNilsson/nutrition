@@ -4,20 +4,27 @@ URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
 TRANSFORMS  := 6NF 5NF
 TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).json)
+ENCODINGS   := pson
+ENCODED     := $(foreach encoding,$(ENCODINGS),$(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).$(encoding)))
+TOCOMPRESS  := $(TRANSFORMED) $(ENCODED)
 COMPRESSION := brotli snappy lzma lzf
-COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach json,$(TRANSFORMED) $(XML),$(json).$(algorithm)))
+COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach file,$(TOCOMPRESS) $(XML),$(file).$(algorithm)))
 
 .PHONY: all tools
 .DELETE_ON_ERROR:
 .SECONDEXPANSION:
 
-all: npm_install $(COMPRESSED)
 export PATH := .:node_modules/.bin:$(PATH)
 
+all: npm_install $(COMPRESSED)
 
 $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
 	compress $(subst .,,$(suffix $@)) < $< > $@
+
+$(ENCODED): $$(basename $$@).json
+	@mkdir -p $(@D)
+	encode $(subst .,,$(suffix $@)) < $< > $@
 
 $(TRANSFORMED): data/Naringsvarde.%.json: $(XML)
 	@mkdir -p $(@D)

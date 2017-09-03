@@ -25,6 +25,7 @@
     "lzma-native": "^3.0.1",
     "moment-timezone": "^0.5.13",
     "node-expat": "^2.3.16",
+    "pson": "^2.0.0",
     "snappy-stream": "^2.0.0"
   },
   "dependencies": {}

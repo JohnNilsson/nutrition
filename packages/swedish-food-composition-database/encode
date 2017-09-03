@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+const encodings = {
+
+  "pson"(){
+    const PSON = require('pson');
+    const pson = new PSON.ProgressivePair();
+    require('get-stdin')
+    .buffer()
+    .then(b => {
+      const data = JSON.parse(b);
+      let bOut = pson.toBuffer(data); //First seed dict
+      bOut = pson.toBuffer(data);     //Then again seeded
+      process.stdout.write(bOut);
+    });
+  },
+
+};
+
+
+
+const encoding = encodings[process.argv[2]];
+if (typeof encoding === 'function') {
+  encoding();
+} else {
+  throw new Error("Unsupported encoding: " + encoding);
+}
