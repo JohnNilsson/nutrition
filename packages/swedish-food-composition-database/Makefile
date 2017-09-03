@@ -19,7 +19,7 @@ $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
 	compress $(subst .,,$(suffix $@)) < $< > $@
 
-data/Naringsvarde.%.json: $(XML)
+$(TRANSFORMED): data/Naringsvarde.%.json: $(XML)
 	@mkdir -p $(@D)
 	transform $* < $< > $@
 
