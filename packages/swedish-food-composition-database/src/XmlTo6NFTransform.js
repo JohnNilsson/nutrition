@@ -1,4 +1,5 @@
 const XmlTransform = require('./XmlTransform');
+const moment = require('moment-timezone');
 
 // Normalize to 6NF (using array index as id)
 // TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
@@ -150,7 +151,7 @@ XmlTo6NFTransform.visitor = {
                 this.data.Livsmedel.Naringsvarde[Forkortning] = nv;
               }
               nv.Varde             [fId] = Number(Varde);
-              nv.SenastAndrad      [fId] = id(SenastAndrad,this.data.SenastAndrad);
+              nv.SenastAndrad      [fId] = id(d(SenastAndrad),this.data.SenastAndrad);
               nv.Vardetyp          [fId] = id(Vardetyp,this.data.Vardetyp);
               nv.Ursprung          [fId] = id(Ursprung,this.data.Ursprung);
               nv.Publikation       [fId] = id(Publikation,this.data.Publikation);
@@ -169,6 +170,10 @@ XmlTo6NFTransform.visitor = {
     }
   }
 };
+
+function d(dateString){
+  return moment.tz(dateString,"Europe/Stockholm").toJSON()
+}
 
 function id(value,array) {
 

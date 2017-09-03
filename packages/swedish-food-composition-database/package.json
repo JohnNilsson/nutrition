@@ -23,6 +23,7 @@
     "iltorb": "^1.3.6",
     "lzfjs": "^1.0.1",
     "lzma-native": "^3.0.1",
+    "moment-timezone": "^0.5.13",
     "node-expat": "^2.3.16",
     "snappy-stream": "^2.0.0"
   },

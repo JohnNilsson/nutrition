@@ -1,4 +1,5 @@
 const XmlTransform = require('./XmlTransform');
+const moment = require('moment-timezone');
 
 // Normalize to 5NF (using array index as id)
 class XmlTo5NFTransform extends XmlTransform {
@@ -74,7 +75,7 @@ XmlTo5NFTransform.visitor = {
             Forkortning      (text) { this.currentNutrient.Forkortning       = text; },
             Varde            (text) { this.currentNutrient.Varde             = Number(text); },
             Enhet            (text) { this.currentNutrient.Enhet             = text; },
-            SenastAndrad     (text) { this.currentNutrient.SenastAndrad      = id(text,this.data.SenastAndrad);      },
+            SenastAndrad     (text) { this.currentNutrient.SenastAndrad      = id(d(text),this.data.SenastAndrad);      },
             Vardetyp         (text) { this.currentNutrient.Vardetyp          = id(text,this.data.Vardetyp);          },
             Ursprung         (text) { this.currentNutrient.Ursprung          = id(text,this.data.Ursprung);          },
             Publikation      (text) { this.currentNutrient.Publikation       = id(text,this.data.Publikation);       },
@@ -138,6 +139,10 @@ function nn(object){
     nn[key] = value;
   }
   return nn;
+}
+
+function d(dateString){
+  return moment.tz(dateString,"Europe/Stockholm").toJSON()
 }
 
 function id(value,array) {
