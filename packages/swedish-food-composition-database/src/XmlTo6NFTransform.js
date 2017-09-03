@@ -17,15 +17,8 @@ class XmlTo6NFTransform extends XmlTransform {
     super(XmlTo6NFTransform.visitor,{readableObjectMode:true});
 
     this.data = {
-      Version: '',
-      Grupp: {
-        Namn: [],
-      },
-      Naringsamne: {
-        Namn       : [],
-        Forkortning: [],
-        Enhet      : [],
-      },
+      Version          : '',
+      Grupp            : [],
       SenastAndrad     : [],
       Vardetyp         : [],
       Ursprung         : [],
@@ -51,6 +44,11 @@ class XmlTo6NFTransform extends XmlTransform {
             //   Kommentar        : [],
             // }
         },
+      },
+      Naringsamne: {
+        Namn       : [],
+        Forkortning: [],
+        Enhet      : [],
       },
     };
 
@@ -89,7 +87,7 @@ XmlTo6NFTransform.visitor = {
         },
 
         Huvudgrupp(text) {
-          this.data.Livsmedel.Grupp[this.currentFood.id] = id(text, this.data.Grupp.Namn);
+          this.data.Livsmedel.Grupp[this.currentFood.id] = id(text, this.data.Grupp);
         },
 
         Naringsvarden: {
