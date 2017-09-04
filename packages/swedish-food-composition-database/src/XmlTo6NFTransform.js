@@ -1,5 +1,5 @@
 const XmlTransform = require('./XmlTransform');
-const moment = require('moment-timezone');
+const { n, d, id } = require('./utils');
 
 // Normalize to 6NF (using array index as id)
 // TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
@@ -148,7 +148,7 @@ XmlTo6NFTransform.visitor = {
                 };
                 this.data.Livsmedel.Naringsvarde[Forkortning] = nv;
               }
-              nv.Varde             [fId] = Number(Varde);
+              nv.Varde             [fId] = n(Varde);
               nv.SenastAndrad      [fId] = id(d(SenastAndrad),this.data.SenastAndrad);
               nv.Vardetyp          [fId] = id(Vardetyp,this.data.Vardetyp);
               nv.Ursprung          [fId] = id(Ursprung,this.data.Ursprung);
@@ -162,6 +162,7 @@ XmlTo6NFTransform.visitor = {
         },
       },
       _endElement(){
+        cleanupNulls(this.data.Livsmedel, this.data);
         this.push(this.data);
         this.push(null);
       }
@@ -169,20 +170,32 @@ XmlTo6NFTransform.visitor = {
   }
 };
 
-function d(dateString){
-  return moment.tz(dateString,"Europe/Stockholm").toJSON()
-}
-
-function id(value,array) {
-
-  let id = array.indexOf(value);
-
-  if(id === -1){
-    id = array.length;
-    array[id] = value;
+function cleanupNulls(foreignKeys, data){
+  for(const key of Object.keys(foreignKeys)){
+    const fkArr = foreignKeys[key];
+    const dataArr = data[key];
+    if(Array.isArray(fkArr)) {
+      if(!Array.isArray(dataArr)){
+        if(key === 'Varde'){
+          setNulls(fkArr,-1,true);
+        }
+      } else {
+        setNulls(fkArr,id(null,dataArr));
+      }
+    } else if (typeof fkArr === 'object') {
+      cleanupNulls(fkArr, data);
+    }
   }
-
-  return id;
 }
+
+function setNulls(arr,value){
+  for(let i = 0; i < arr.length; i++){
+    const v = arr[i];
+    if(v === null || v === undefined || Number.isNaN(v)){
+      arr[i] = value;
+    }
+  }
+}
+
 
 module.exports = XmlTo6NFTransform;
