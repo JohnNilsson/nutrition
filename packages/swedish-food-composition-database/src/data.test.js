@@ -41,3 +41,20 @@ function testForeignKeys(object,path,assert) {
   }
 }
 
+
+test('6NF data validates agains avro-schema', assert => {
+  const avro = require('avsc');
+  const type = avro.Type.forSchema(require('./Naringsvarde.6NF.avro-schema.json'));
+  console.error('Current value Livsmedel,Naringsvarde,I,Varde,0 = ',data6NF.Livsmedel.Naringsvarde.I.Varde[0]);
+  assert.ok(type.isValid(data6NF,{
+    errorHook(path, any, type){
+      const util = require('util');
+      throw new Error(util.format('invalid %s: %j', path.join(), any));
+      //console.error(path,any,type);
+    },
+    noUndeclaredFields: true
+  }));
+
+  assert.end();
+});
+

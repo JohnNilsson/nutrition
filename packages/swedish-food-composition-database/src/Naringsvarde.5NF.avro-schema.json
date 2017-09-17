@@ -1,0 +1,38 @@
+{ "type": "record",
+  "fields":
+  [ { "name": "Version",           "type": "string" },
+    { "name": "Grupp",             "type": { "type": "array", "items": "string" } },
+    { "name": "SenastAndrad",      "type": { "type": "array", "items": "string" } },
+    { "name": "Vardetyp",          "type": { "type": "array", "items": "string" } },
+    { "name": "Ursprung",          "type": { "type": "array", "items": "string" } },
+    { "name": "Publikation",       "type": { "type": "array", "items": "string" } },
+    { "name": "Framtagningsmetod", "type": { "type": "array", "items": "string" } },
+    { "name": "Metodtyp",          "type": { "type": "array", "items": "string" } },
+    { "name": "Referenstyp",       "type": { "type": "array", "items": "string" } },
+    { "name": "Kommentar",         "type": { "type": "array", "items": "string" } },
+    { "name": "Livsmedel",         "type": { "type": "array", "items": {
+      "type": "record",
+      "fields":
+        [ { "name": "Nummer",           "type": "int"    },
+          { "name": "Namn",             "type": "string" },
+          { "name": "Grupp",            "type": "int"    } ] } } },
+    { "name": "Naringsamne",       "type": { "type": "array", "items": {
+      "type": "record",
+      "fields":
+        [ { "name": "Namn",             "type": "string" },
+          { "name": "Forkortning",      "type": "string" },
+          { "name": "Enhet",            "type": "string" } ] } } },
+    { "name": "Naringsvarde",      "type": { "type": "array", "items": {
+      "type": "record",
+      "fields":
+        [ { "name": "Livsmedel",        "type": "int"    },
+          { "name": "Naringsamne",      "type": "int"    },
+          { "name": "Varde",            "type": "float"  },
+          { "name": "SenastAndrad",     "type": "int"    },
+          { "name": "Vardetyp",         "type": [ "null", "int" ], "default": null },
+          { "name": "Ursprung",         "type": [ "null", "int" ], "default": null },
+          { "name": "Publikation",      "type": [ "null", "int" ], "default": null },
+          { "name": "Framtagningsmetod","type": [ "null", "int" ], "default": null },
+          { "name": "Metodtyp",         "type": [ "null", "int" ], "default": null },
+          { "name": "Referenstyp",      "type": [ "null", "int" ], "default": null },
+          { "name": "Kommentar",        "type": [ "null", "int" ], "default": null } ] } } } ] }

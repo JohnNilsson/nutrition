@@ -51,6 +51,43 @@ const encodings = {
     });
   },
 
+  "avro"(schema){
+    const avro = require('avsc');
+    const { setNulls } = require('./src/utils');
+
+    let type;
+
+    if(schema === "6NF"){
+      type = avro.Type.forSchema(require('./src/Naringsvarde.6NF.avro-schema.json'));
+    } else
+    if (schema === "5NF"){
+      type = avro.Type.forSchema(require('./src/Naringsvarde.5NF.avro-schema.json'));
+    }
+
+    require('get-stdin')
+    .buffer()
+    .then(b => {
+      const data = JSON.parse(b);
+
+      if(schema === "6NF"){
+        for(const key of Object.keys(data.Livsmedel.Naringsvarde)){
+          setNulls(data.Livsmedel.Naringsvarde[key].Varde,NaN);
+        }
+      }
+
+      type.isValid(data,{
+        noUndeclaredFields: true,
+        errorHook(path, any, type){
+          const util = require('util');
+          throw new Error(util.format('invalid %s: %j', path.join(), any));
+        }
+      });
+
+      const out = type.toBuffer(data);
+      process.stdout.write(out);
+    });
+  },
+
 };
 
 process.on('unhandledRejection', error => {
@@ -59,8 +96,9 @@ process.on('unhandledRejection', error => {
 
 
 const encoding = encodings[process.argv[2]];
+const schema   = process.argv[3];
 if (typeof encoding === 'function') {
-  encoding();
+  encoding(schema);
 } else {
-  throw new Error("Unsupported encoding: " + encoding);
+  throw new Error("Unsupported encoding: " + process.argv[2]);
 }

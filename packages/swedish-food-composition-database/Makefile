@@ -4,7 +4,7 @@ URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
 TRANSFORMS  := 6NF 5NF
 TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).json)
-ENCODINGS   := pson bson cbor msgpack
+ENCODINGS   := pson bson cbor msgpack avro
 ENCODED     := $(foreach encoding,$(ENCODINGS),$(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).$(encoding)))
 TOCOMPRESS  := $(TRANSFORMED) $(ENCODED)
 COMPRESSION := brotli snappy lzma lzf
@@ -25,7 +25,7 @@ $(COMPRESSED): $$(basename $$@)
 
 $(ENCODED): $$(basename $$@).json
 	@mkdir -p $(@D)
-	encode $(subst .,,$(suffix $@)) < $< > $@
+	encode $(subst .,,$(suffix $@)) $(subst .,,$(suffix $(basename $@))) < $< > $@
 
 $(TRANSFORMED): data/Naringsvarde.%.json: $(XML)
 	@mkdir -p $(@D)
