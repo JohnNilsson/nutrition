@@ -14,7 +14,8 @@ COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach file,$(TOCOMPRESS) $
 .DELETE_ON_ERROR:
 .SECONDEXPANSION:
 
-export PATH := .:node_modules/.bin:$(PATH)
+PATH  := .:$(shell npm bin):$(PATH)
+SHELL := /bin/bash
 
 all: npm_install $(COMPRESSED)
 
