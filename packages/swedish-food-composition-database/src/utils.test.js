@@ -1,5 +1,5 @@
 const test = require('tape');
-const { d, id } = require('./utils');
+const { setNulls, d, id, sortByFkFrequency } = require('./utils');
 
 test('id gets index of existing value', assert => {
   const val1 = 'test value 1';
@@ -57,3 +57,29 @@ test('id gets index of null for undefined', assert => {
 
   assert.end();
 });
+
+test('sortByFkFrequency', assert => {
+
+  const dataArr = ['A','B','C'];
+  const fkArr = [ 2,2, 1,1,1, 0 ];
+
+  sortByFkFrequency(fkArr,dataArr);
+
+  assert.deepEquals(dataArr,['B','C','A']);
+  assert.deepEquals(fkArr,[ 1,1, 0,0,0, 2 ]);
+
+  assert.end();
+});
+
+test('set nulls', assert => {
+  const arr = [null,undefined,"",0,"text",1,NaN,null];
+  const n = "NULL";
+  setNulls(arr,n);
+
+  assert.deepEquals(
+    arr.map(v => Number.isNaN(v)?'NaN':v),
+    [n,n,"",0,"text",1,'NaN',n],
+  );
+
+  assert.end();
+})

@@ -1,5 +1,5 @@
 const XmlTransform = require('./XmlTransform');
-const { n, d, id } = require('./utils');
+const { setNulls, n, d, id, sortByFkFrequency } = require('./utils');
 
 // Normalize to 6NF (using array index as id)
 // TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
@@ -87,7 +87,7 @@ XmlTo6NFTransform.visitor = {
         },
 
         Huvudgrupp(text) {
-          this.data.Livsmedel.Grupp[this.currentFood.id] = id(text, this.data.Grupp);
+          this.data.Livsmedel.Grupp[this.currentFood.id] = id(text||'', this.data.Grupp);
         },
 
         Naringsvarden: {
@@ -149,20 +149,21 @@ XmlTo6NFTransform.visitor = {
                 this.data.Livsmedel.Naringsvarde[Forkortning] = nv;
               }
               nv.Varde             [fId] = n(Varde);
-              nv.SenastAndrad      [fId] = id(d(SenastAndrad),this.data.SenastAndrad);
-              nv.Vardetyp          [fId] = id(Vardetyp,this.data.Vardetyp);
-              nv.Ursprung          [fId] = id(Ursprung,this.data.Ursprung);
-              nv.Publikation       [fId] = id(Publikation,this.data.Publikation);
-              nv.Framtagningsmetod [fId] = id(Framtagningsmetod,this.data.Framtagningsmetod);
-              nv.Metodtyp          [fId] = id(Metodtyp,this.data.Metodtyp);
-              nv.Referenstyp       [fId] = id(Referenstyp,this.data.Referenstyp);
-              nv.Kommentar         [fId] = id(Kommentar,this.data.Kommentar);
+              nv.SenastAndrad      [fId] = id(d(SenastAndrad)   ||'',this.data.SenastAndrad);
+              nv.Vardetyp          [fId] = id(Vardetyp          ||'',this.data.Vardetyp);
+              nv.Ursprung          [fId] = id(Ursprung          ||'',this.data.Ursprung);
+              nv.Publikation       [fId] = id(Publikation       ||'',this.data.Publikation);
+              nv.Framtagningsmetod [fId] = id(Framtagningsmetod ||'',this.data.Framtagningsmetod);
+              nv.Metodtyp          [fId] = id(Metodtyp          ||'',this.data.Metodtyp);
+              nv.Referenstyp       [fId] = id(Referenstyp       ||'',this.data.Referenstyp);
+              nv.Kommentar         [fId] = id(Kommentar         ||'',this.data.Kommentar);
             }
           },
         },
       },
       _endElement(){
-        cleanupNulls(this.data.Livsmedel, this.data);
+        removeFkNulls(this.data.Livsmedel, this.data);
+        sortDataTablesByFkFrequency(this.data.Livsmedel, this.data);
         this.push(this.data);
         this.push(null);
       }
@@ -170,32 +171,38 @@ XmlTo6NFTransform.visitor = {
   }
 };
 
-function cleanupNulls(foreignKeys, data){
+// Remove nulls, from large arrays, should help keep binary encodings simple
+// also '0' is shorter than 'null' so might even help the json encoding
+function removeFkNulls(foreignKeys, data){
   for(const key of Object.keys(foreignKeys)){
     const fkArr = foreignKeys[key];
     const dataArr = data[key];
     if(Array.isArray(fkArr)) {
       if(!Array.isArray(dataArr)){
         if(key === 'Varde'){
-          setNulls(fkArr,-1,true);
+          setNulls(fkArr,NaN);
         }
       } else {
-        setNulls(fkArr,id(null,dataArr));
+        setNulls(fkArr,id('',dataArr));
       }
     } else if (typeof fkArr === 'object') {
-      cleanupNulls(fkArr, data);
+      removeFkNulls(fkArr, data);
     }
   }
 }
 
-function setNulls(arr,value){
-  for(let i = 0; i < arr.length; i++){
-    const v = arr[i];
-    if(v === null || v === undefined || Number.isNaN(v)){
-      arr[i] = value;
+// Sort tables to keep the most frequently used fks short
+// should help both with json as well as binary variable length zigzag encodings
+function sortDataTablesByFkFrequency(foreignKeys, dataTables){
+  for(const key of Object.keys(foreignKeys)){
+    const fkArr = foreignKeys[key];
+    const dataArr = dataTables[key];
+    if(Array.isArray(fkArr) && Array.isArray(dataArr)) {
+      sortByFkFrequency(fkArr,dataArr);
+    } else if (typeof fkArr === 'object') {
+      sortDataTablesByFkFrequency(fkArr, dataTables);
     }
   }
 }
-
 
 module.exports = XmlTo6NFTransform;

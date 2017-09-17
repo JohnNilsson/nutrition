@@ -1,5 +1,6 @@
 const XmlTransform = require('./XmlTransform');
 const moment = require('moment-timezone');
+const { nn, n, d, id } = require('./utils');
 
 // Normalize to 5NF (using array index as id)
 class XmlTo5NFTransform extends XmlTransform {
@@ -58,7 +59,7 @@ XmlTo5NFTransform.visitor = {
         },
 
         Huvudgrupp(text) {
-          this.currentFood.Grupp = id(text, this.data.Grupp);
+          this.currentFood.Grupp = id(text||'', this.data.Grupp);
         },
 
         Naringsvarden: {
@@ -73,16 +74,16 @@ XmlTo5NFTransform.visitor = {
 
             Namn             (text) { this.currentNutrient.Namn              = text; },
             Forkortning      (text) { this.currentNutrient.Forkortning       = text; },
-            Varde            (text) { this.currentNutrient.Varde             = Number(text); },
+            Varde            (text) { this.currentNutrient.Varde             = n(text); },
             Enhet            (text) { this.currentNutrient.Enhet             = text; },
-            SenastAndrad     (text) { this.currentNutrient.SenastAndrad      = id(d(text),this.data.SenastAndrad);      },
-            Vardetyp         (text) { this.currentNutrient.Vardetyp          = id(text,this.data.Vardetyp);          },
-            Ursprung         (text) { this.currentNutrient.Ursprung          = id(text,this.data.Ursprung);          },
-            Publikation      (text) { this.currentNutrient.Publikation       = id(text,this.data.Publikation);       },
-            Framtagningsmetod(text) { this.currentNutrient.Framtagningsmetod = id(text,this.data.Framtagningsmetod); },
-            Metodtyp         (text) { this.currentNutrient.Metodtyp          = id(text,this.data.Metodtyp);          },
-            Referenstyp      (text) { this.currentNutrient.Referenstyp       = id(text,this.data.Referenstyp);       },
-            Kommentar        (text) { this.currentNutrient.Kommentar         = id(text,this.data.Kommentar);         },
+            SenastAndrad     (text) { this.currentNutrient.SenastAndrad      = id(d(text)||'',this.data.SenastAndrad);      },
+            Vardetyp         (text) { this.currentNutrient.Vardetyp          = id(text   ||'',this.data.Vardetyp);          },
+            Ursprung         (text) { this.currentNutrient.Ursprung          = id(text   ||'',this.data.Ursprung);          },
+            Publikation      (text) { this.currentNutrient.Publikation       = id(text   ||'',this.data.Publikation);       },
+            Framtagningsmetod(text) { this.currentNutrient.Framtagningsmetod = id(text   ||'',this.data.Framtagningsmetod); },
+            Metodtyp         (text) { this.currentNutrient.Metodtyp          = id(text   ||'',this.data.Metodtyp);          },
+            Referenstyp      (text) { this.currentNutrient.Referenstyp       = id(text   ||'',this.data.Referenstyp);       },
+            Kommentar        (text) { this.currentNutrient.Kommentar         = id(text   ||'',this.data.Kommentar);         },
 
             _endElement() {
               const {Namn,Forkortning,Varde,Enhet,SenastAndrad,Vardetyp,Ursprung,Publikation,Framtagningsmetod,Metodtyp,Referenstyp,Kommentar} = this.currentNutrient;
@@ -96,8 +97,7 @@ XmlTo5NFTransform.visitor = {
 
               const fId = this.currentFood.id;
 
-              const nvId = this.data.Naringsvarde.length;
-              this.data.Naringsvarde[nvId] = nn({
+              const nv = nn({
                 Livsmedel: fId,
                 Naringsamne: nId,
                 Varde,
@@ -110,6 +110,18 @@ XmlTo5NFTransform.visitor = {
                 Referenstyp,
                 Kommentar
               });
+              const nvId = this.data.Naringsvarde.length;
+              this.data.Naringsvarde[nvId] = nv;
+
+              if(!Varde && Varde != 0){
+                const {inspect} = require('util');
+                console.error('Null Varde:', inspect({
+                  Varde,
+                  Livsmedel: this.currentFood,
+                  Naringsamne: this.data.Naringsamne[nv.Naringsamne],
+                  Naringsvarde: nv
+                }));
+              }
             }
           },
         },
@@ -128,33 +140,5 @@ XmlTo5NFTransform.visitor = {
     }
   }
 };
-
-function nn(object){
-  const nn = {};
-  for(const key of Object.keys(object)){
-    const value = object[key];
-    if(value === undefined || value === null || value === ''){
-      continue;
-    }
-    nn[key] = value;
-  }
-  return nn;
-}
-
-function d(dateString){
-  return moment.tz(dateString,"Europe/Stockholm").toJSON()
-}
-
-function id(value,array) {
-
-  let id = array.indexOf(value);
-
-  if(id === -1){
-    id = array.length;
-    array[id] = value;
-  }
-
-  return id;
-}
 
 module.exports = XmlTo5NFTransform;
