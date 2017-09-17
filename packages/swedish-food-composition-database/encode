@@ -88,6 +88,26 @@ const encodings = {
     });
   },
 
+  "proto"(schema){
+    let pb;
+    if(schema === "6NF"){
+      pb = require('./src/Naringsvarde.6NF.proto.js');
+    } else
+    if (schema === "5NF"){
+      pb = require('./src/Naringsvarde.5NF.proto.js');
+    }
+
+    require('get-stdin')
+    .buffer()
+    .then(b => {
+      const data = JSON.parse(b);
+      const err = pb.LivsmedelsDatabasen.verify(data);
+      if (err)
+        throw Error(schema + ': ' + err);
+      const out = pb.LivsmedelsDatabasen.encode(data).finish();
+      process.stdout.write(out);
+    });
+  }
 };
 
 process.on('unhandledRejection', error => {

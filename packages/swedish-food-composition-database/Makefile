@@ -4,7 +4,7 @@ URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
 TRANSFORMS  := 6NF 5NF
 TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).json)
-ENCODINGS   := pson bson cbor msgpack avro
+ENCODINGS   := pson bson cbor msgpack avro proto
 ENCODED     := $(foreach encoding,$(ENCODINGS),$(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).$(encoding)))
 TOCOMPRESS  := $(TRANSFORMED) $(ENCODED)
 COMPRESSION := brotli snappy lzma lzf
@@ -23,13 +23,16 @@ $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
 	compress $(subst .,,$(suffix $@)) < $< > $@
 
-$(ENCODED): $$(basename $$@).json
+$(ENCODED): $$(basename $$@).json src/Naringsvarde.6NF.proto.js src/Naringsvarde.5NF.proto.js
 	@mkdir -p $(@D)
 	encode $(subst .,,$(suffix $@)) $(subst .,,$(suffix $(basename $@))) < $< > $@
 
 $(TRANSFORMED): data/Naringsvarde.%.json: $(XML)
 	@mkdir -p $(@D)
 	transform $* < $< > $@
+
+%.proto.js: %.proto
+	pbjs -t static-module -w commonjs --keep-case -o $@ $<
 
 $(XML):
 	@mkdir -p $(@D)
