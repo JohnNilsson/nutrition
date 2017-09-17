@@ -40,6 +40,7 @@ https://github.com/thestorefront/DataCollection.js
 http://staypositive.ru/sklad/
 http://dev.yathit.com/ydn-db/
 http://www.defiantjs.com/
+https://www.npmjs.com/package/nano-sql
 
 https://github.com/erikolson186/relational.js
 http://alasql.org/
