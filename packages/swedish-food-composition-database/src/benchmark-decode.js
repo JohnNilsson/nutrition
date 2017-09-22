@@ -53,11 +53,11 @@ for(const compression of compressions){
         ? `${compression} compressed ${encoding} ${transform}`
         : `uncompressed ${encoding} ${transform}`
       const file = compression
-        ?`../data/Naringsvarde.${transform}.${encoding}.${compression}`
-        :`../data/Naringsvarde.${transform}.${encoding}`;
+        ? __dirname + `/../data/Naringsvarde.${transform}.${encoding}.${compression}`
+        : __dirname + `/../data/Naringsvarde.${transform}.${encoding}`;
       const schema =
-        encoding == 'avro'  ? `./Naringsvarde.${transform}.avro-schema.json` :
-        encoding == 'proto' ? `./Naringsvarde.${transform}.proto.js` :
+        encoding == 'avro'  ? __dirname + `/Naringsvarde.${transform}.avro-schema.json` :
+        encoding == 'proto' ? __dirname + `/Naringsvarde.${transform}.proto.js` :
         '';
       //console.log({file,compression,encoding,schema});
       suite.add(name,benchmark({file,compression,encoding,schema}));
