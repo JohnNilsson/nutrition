@@ -101,6 +101,9 @@ const encodings = {
     .buffer()
     .then(b => {
       const data = JSON.parse(b);
+      const {setNulls} = require('./src/utils');
+      for(const key of Object.keys(data.Livsmedel.Naringsvarde))
+        setNulls(data.Livsmedel.Naringsvarde[key].Varde,NaN);
       const err = pb.LivsmedelsDatabasen.verify(data);
       if (err)
         throw Error(schema + ': ' + err);

@@ -180,7 +180,8 @@ function removeFkNulls(foreignKeys, data){
     if(Array.isArray(fkArr)) {
       if(!Array.isArray(dataArr)){
         if(key === 'Varde'){
-          setNulls(fkArr,NaN);
+          //NaN won't work, json can't represent NaN
+          //setNulls(fkArr,NaN);
         }
       } else {
         setNulls(fkArr,id('',dataArr));

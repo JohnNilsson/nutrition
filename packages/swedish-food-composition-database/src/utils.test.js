@@ -82,4 +82,16 @@ test('set nulls', assert => {
   );
 
   assert.end();
-})
+});
+
+
+test('set nulls to NaN', assert => {
+  const arr = [null,1,NaN];
+  setNulls(arr,NaN);
+
+  assert.ok(Number.isNaN(arr[0]));
+  assert.ok(1 === arr[1]);
+  assert.ok(Number.isNaN(arr[2]));
+
+  assert.end();
+});
