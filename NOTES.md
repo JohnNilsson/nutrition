@@ -94,3 +94,7 @@ http://www.lakareforframtiden.se/
 
 ### Random
 https://chainpoint.org/
+https://github.com/monarch-initiative/SEPIO-ontology
+http://foodontology.github.io/foodon/
+http://www.langual.org/
+http://www.langual.org/download/Presentation/LanguaLpresentation%202015-10-04.pdf
