@@ -23,7 +23,7 @@ message Livsmedel {
   repeated string Namn = 2;
   repeated uint32 Grupp = 3;
 
-  Naringsvarde Naringsvarde = 4;
+  map<string, Naringsvarde> Naringsvarde = 4;
 }
 
 message Naringsamne {
