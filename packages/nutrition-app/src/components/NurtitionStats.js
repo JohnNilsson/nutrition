@@ -1,3 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
-export default () => <div>da</div>;
+const NutritionStats = () => <div>da</div>;
+export default NutritionStats;

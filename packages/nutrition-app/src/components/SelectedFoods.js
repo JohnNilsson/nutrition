@@ -1,3 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
+import { Select } from "semantic-ui-react";
 
-export default () => <div>ta</div>;
+const SelectedFood = () => <div>ta</div>;
+export default SelectedFood;
