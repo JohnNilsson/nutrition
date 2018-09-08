@@ -4,7 +4,8 @@ URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
 TRANSFORMS  := 6NF 5NF
 TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).json)
-COMPRESSION := brotli snappy lzma lzf
+TOCOMPRESS  := $(TRANSFORMED)
+COMPRESSION := brotli
 COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach file,$(TOCOMPRESS) $(XML),$(file).$(algorithm)))
 
 .PHONY: all tools

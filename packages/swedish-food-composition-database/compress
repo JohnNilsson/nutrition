@@ -15,40 +15,6 @@ const algorithms = {
       .pipe(process.stdout);
   },
 
-  snappy() {
-    const compress = require('snappy-stream').createCompressStream();
-    process.stdin
-      .pipe(compress)
-      .pipe(process.stdout);
-  },
-
-  lzma() {
-    const { createCompressor, PRESET_EXTREME } = require('lzma-native');
-    const size = require('fs').fstatSync(process.stdin.fd).size / 1024 / 1024;
-    const [, preset] = [
-      // [DictSize in MiB, preset]
-      [0, 0],
-      [1, 1],
-      [2, 2],
-      [4, 4],
-      [8, 6],
-      [16, 7],
-      [32, 8],
-      [64, 9],
-    ].find(([ds,]) => ds >= size || ds === 64);
-    const compress = createCompressor({ preset: preset | PRESET_EXTREME });
-    process.stdin
-      .pipe(compress)
-      .pipe(process.stdout);
-  },
-
-  lzf(){
-    const {compress} = require('lzfjs');
-    require('get-stdin').buffer().then(data => {
-      process.stdout.write(compress(data));
-    });
-  },
-
 };
 
 
