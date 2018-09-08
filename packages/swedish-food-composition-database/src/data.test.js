@@ -3,7 +3,6 @@ const test = require('tape');
 const {setNulls} = require('./utils');
 
 const data6NF = require('../data/Naringsvarde.6NF.json');
-const data5NF = require('../data/Naringsvarde.5NF.json');
 
 for(const key of Object.keys(data6NF.Livsmedel.Naringsvarde)){
   setNulls(data6NF.Livsmedel.Naringsvarde[key].Varde,NaN);
@@ -12,7 +11,6 @@ for(const key of Object.keys(data6NF.Livsmedel.Naringsvarde)){
 test('Group is array', assert => {
 
   assert.ok(Array.isArray(data6NF.Grupp));
-  assert.ok(Array.isArray(data5NF.Grupp));
 
   assert.end();
 });

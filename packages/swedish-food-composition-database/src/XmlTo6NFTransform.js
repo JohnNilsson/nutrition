@@ -4,10 +4,6 @@ const { setNulls, n, d, id, sortByFkFrequency } = require('./utils');
 // Normalize to 6NF (using array index as id)
 // TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
 // Other variants to try:
-//   - 1NF with seperate strings table
-//   - BCNF
-//   - 5NF
-// Use https://github.com/erikolson186/relational.js or http://alasql.org/ for those
 //   - JSON-LD, is it possible to have an efficient serialization with such a model?
 //     OTOH, going with JSON-LD/RDF kind of implies that sending the entier database is not
 //     the primary concern anymore, open world an all that.

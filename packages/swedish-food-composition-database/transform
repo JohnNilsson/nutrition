@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const { Transform } = require('stream');
 const JSONStream = require('JSONStream');
 
 const algorithms = {
@@ -9,14 +8,6 @@ const algorithms = {
     const XmlTo6NFTransform = require('./src/XmlTo6NFTransform');
     process.stdin
     .pipe(new XmlTo6NFTransform())
-    .pipe(JSONStream.stringify(false))
-    .pipe(process.stdout);
-  },
-
-  "5NF"(){
-    const XmlTo5NFTransform = require('./src/XmlTo5NFTransform');
-    process.stdin
-    .pipe(new XmlTo5NFTransform())
     .pipe(JSONStream.stringify(false))
     .pipe(process.stdout);
   },
