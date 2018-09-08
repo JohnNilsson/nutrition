@@ -19,12 +19,9 @@
   "homepage": "https://github.com/JohnNilsson/nutrition#readme",
   "devDependencies": {
     "JSONStream": "^1.3.1",
-    "avsc": "^5.0.6",
     "benchmark": "^2.1.4",
     "blue-tape": "^1.0.0",
-    "borc": "^2.0.2",
     "brotli": "^1.3.2",
-    "bson": "^1.0.4",
     "faucet": "0.0.1",
     "get-stdin": "^5.0.1",
     "iltorb": "^1.3.6",
@@ -33,10 +30,7 @@
     "lzma-native": "^3.0.1",
     "microtime": "^2.1.6",
     "moment-timezone": "^0.5.13",
-    "msgpack-lite": "^0.1.26",
     "node-expat": "^2.3.16",
-    "protobufjs": "^6.8.0",
-    "pson": "^2.0.0",
     "snappy-stream": "^2.0.0",
     "tape": "^4.8.0",
     "xml2js": "^0.4.19"
