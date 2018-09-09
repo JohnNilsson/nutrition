@@ -1,11 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node --pretty --files
 
 const JSONStream = require('JSONStream');
 
 const algorithms = {
 
   "6NF"(){
-    const XmlTo6NFTransform = require('./src/XmlTo6NFTransform');
+    const XmlTo6NFTransform = require('./src/XmlTo6NFTransform').default;
     process.stdin
     .pipe(new XmlTo6NFTransform())
     .pipe(JSONStream.stringify(false))

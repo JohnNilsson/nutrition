@@ -1,5 +1,65 @@
-const XmlTransform = require('./XmlTransform');
-const { setNulls, n, d, id, sortByFkFrequency } = require('./utils');
+import XmlTransform, { Visitor } from './XmlTransform'
+import { setNulls, n, d, id, sortByFkFrequency } from './utils'
+
+
+interface CurrentFood {
+  id: number
+  nutrients?: number[]
+}
+
+interface CurrentNutrient {
+  Namn?: string
+  Forkortning?: string
+  Varde?: string
+  Enhet?: string
+  SenastAndrad?: string
+  Vardetyp?: string
+  Ursprung?: string
+  Publikation?: string
+  Framtagningsmetod?: string
+  Metodtyp?: string
+  Referenstyp?: string
+  Kommentar?: string
+}
+
+interface PkRel<T> extends Array<T> {}
+interface FkRel extends Array<number> {}
+
+export interface Naringsvarde {
+  Version          : string
+  Grupp            : PkRel<string>,
+  SenastAndrad     : PkRel<string>,
+  Vardetyp         : PkRel<string>,
+  Ursprung         : PkRel<string>,
+  Publikation      : PkRel<string>,
+  Framtagningsmetod: PkRel<string>,
+  Metodtyp         : PkRel<string>,
+  Referenstyp      : PkRel<string>,
+  Kommentar        : PkRel<string>,
+  Livsmedel: {
+    Nummer : PkRel<number>,
+    Namn : PkRel<string>,
+    Grupp: FkRel,
+    Naringsvarde: {
+      [forkortning:string]: {
+          Varde            : PkRel<number>,
+          SenastAndrad     : FkRel,
+          Vardetyp         : FkRel,
+          Ursprung         : FkRel,
+          Publikation      : FkRel,
+          Framtagningsmetod: FkRel,
+          Metodtyp         : FkRel,
+          Referenstyp      : FkRel,
+          Kommentar        : FkRel,
+      }
+    },
+  },
+  Naringsamne: {
+    Namn       : PkRel<string>,
+    Forkortning: PkRel<string>,
+    Enhet      : PkRel<string>,
+  },
+}
 
 // Normalize to 6NF (using array index as id)
 // TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
@@ -7,10 +67,17 @@ const { setNulls, n, d, id, sortByFkFrequency } = require('./utils');
 //   - JSON-LD, is it possible to have an efficient serialization with such a model?
 //     OTOH, going with JSON-LD/RDF kind of implies that sending the entier database is not
 //     the primary concern anymore, open world an all that.
-class XmlTo6NFTransform extends XmlTransform {
+
+export default class XmlTo6NFTransform extends XmlTransform<XmlTo6NFTransform> {
+
+  public data: Naringsvarde
+  public currentFood: CurrentFood | null
+  public currentNutrient: CurrentNutrient | null;
+
+  protected createVisitorState(){ return this; }
 
   constructor() {
-    super(XmlTo6NFTransform.visitor,{readableObjectMode:true});
+    super(visitor,{readableObjectMode:true});
 
     this.data = {
       Version          : '',
@@ -27,19 +94,7 @@ class XmlTo6NFTransform extends XmlTransform {
         Nummer : [],
         Namn : [],
         Grupp: [],
-        Naringsvarde: {
-          // <Forkortning>: {
-            //   Varde            : [],
-            //   SenastAndrad     : [],
-            //   Vardetyp         : [],
-            //   Ursprung         : [],
-            //   Publikation      : [],
-            //   Framtagningsmetod: [],
-            //   Metodtyp         : [],
-            //   Referenstyp      : [],
-            //   Kommentar        : [],
-            // }
-        },
+        Naringsvarde: {},
       },
       Naringsamne: {
         Namn       : [],
@@ -53,7 +108,7 @@ class XmlTo6NFTransform extends XmlTransform {
   }
 }
 
-XmlTo6NFTransform.visitor = {
+const visitor: Visitor<XmlTo6NFTransform> = {
   LivsmedelDataset: {
 
     Version(version){
@@ -69,11 +124,11 @@ XmlTo6NFTransform.visitor = {
         },
 
         Nummer(text) {
-          this.data.Livsmedel.Nummer[this.currentFood.id] = Number(text);
+          this.data.Livsmedel.Nummer[this.currentFood!.id] = Number(text);
         },
 
         Namn(text) {
-          this.data.Livsmedel.Namn[this.currentFood.id] = text;
+          this.data.Livsmedel.Namn[this.currentFood!.id] = text;
         },
 
         ViktGram(text) {
@@ -83,12 +138,12 @@ XmlTo6NFTransform.visitor = {
         },
 
         Huvudgrupp(text) {
-          this.data.Livsmedel.Grupp[this.currentFood.id] = id(text||'', this.data.Grupp);
+          this.data.Livsmedel.Grupp[this.currentFood!.id] = id(text||'', this.data.Grupp);
         },
 
         Naringsvarden: {
           _startElement() {
-            this.currentFood.nutrients = [];
+            this.currentFood!.nutrients = [];
           },
 
           Naringsvarde: {
@@ -96,22 +151,26 @@ XmlTo6NFTransform.visitor = {
               this.currentNutrient = {};
             },
 
-            Namn             (text) { this.currentNutrient.Namn              = text; },
-            Forkortning      (text) { this.currentNutrient.Forkortning       = text; },
-            Varde            (text) { this.currentNutrient.Varde             = text; },
-            Enhet            (text) { this.currentNutrient.Enhet             = text; },
-            SenastAndrad     (text) { this.currentNutrient.SenastAndrad      = text; },
-            Vardetyp         (text) { this.currentNutrient.Vardetyp          = text; },
-            Ursprung         (text) { this.currentNutrient.Ursprung          = text; },
-            Publikation      (text) { this.currentNutrient.Publikation       = text; },
-            Framtagningsmetod(text) { this.currentNutrient.Framtagningsmetod = text; },
-            Metodtyp         (text) { this.currentNutrient.Metodtyp          = text; },
-            Referenstyp      (text) { this.currentNutrient.Referenstyp       = text; },
-            Kommentar        (text) { this.currentNutrient.Kommentar         = text; },
+            Namn             (text) { this.currentNutrient!.Namn              = text; },
+            Forkortning      (text) { this.currentNutrient!.Forkortning       = text; },
+            Varde            (text) { this.currentNutrient!.Varde             = text; },
+            Enhet            (text) { this.currentNutrient!.Enhet             = text; },
+            SenastAndrad     (text) { this.currentNutrient!.SenastAndrad      = text; },
+            Vardetyp         (text) { this.currentNutrient!.Vardetyp          = text; },
+            Ursprung         (text) { this.currentNutrient!.Ursprung          = text; },
+            Publikation      (text) { this.currentNutrient!.Publikation       = text; },
+            Framtagningsmetod(text) { this.currentNutrient!.Framtagningsmetod = text; },
+            Metodtyp         (text) { this.currentNutrient!.Metodtyp          = text; },
+            Referenstyp      (text) { this.currentNutrient!.Referenstyp       = text; },
+            Kommentar        (text) { this.currentNutrient!.Kommentar         = text; },
 
             _endElement() {
-              const {Namn,Forkortning,Varde,Enhet,SenastAndrad,Vardetyp,Ursprung,Publikation,Framtagningsmetod,Metodtyp,Referenstyp,Kommentar} = this.currentNutrient;
+              const {Namn,Forkortning,Varde,Enhet,SenastAndrad,Vardetyp,Ursprung,Publikation,Framtagningsmetod,Metodtyp,Referenstyp,Kommentar} = this.currentNutrient!;
               this.currentNutrient = null;
+
+              if(!(Forkortning && Namn && Enhet && Varde && SenastAndrad)){
+                throw new Error('Unexpected lack of values');
+              }
 
               let nId = this.data.Naringsamne.Forkortning.indexOf(Forkortning);
               if(nId === -1){
@@ -128,7 +187,7 @@ XmlTo6NFTransform.visitor = {
                 };
               }
 
-              const fId = this.currentFood.id;
+              const fId = this.currentFood!.id;
               let nv = this.data.Livsmedel.Naringsvarde[Forkortning];
               if(nv === undefined){
                 nv = {
@@ -169,7 +228,7 @@ XmlTo6NFTransform.visitor = {
 
 // Remove nulls, from large arrays, should help keep binary encodings simple
 // also '0' is shorter than 'null' so might even help the json encoding
-function removeFkNulls(foreignKeys, data){
+function removeFkNulls(foreignKeys: any, data: any){
   for(const key of Object.keys(foreignKeys)){
     const fkArr = foreignKeys[key];
     const dataArr = data[key];
@@ -190,7 +249,7 @@ function removeFkNulls(foreignKeys, data){
 
 // Sort tables to keep the most frequently used fks short
 // should help both with json as well as binary variable length zigzag encodings
-function sortDataTablesByFkFrequency(foreignKeys, dataTables){
+function sortDataTablesByFkFrequency(foreignKeys: any, dataTables: any){
   for(const key of Object.keys(foreignKeys)){
     const fkArr = foreignKeys[key];
     const dataArr = dataTables[key];
@@ -201,5 +260,3 @@ function sortDataTablesByFkFrequency(foreignKeys, dataTables){
     }
   }
 }
-
-module.exports = XmlTo6NFTransform;

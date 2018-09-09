@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "make",
-    "test": "tape 'src/**/*.test.js' | faucet"
+    "test": "ts-node --pretty --files node_modules/tape/bin/tape 'src/**/*.test.ts' | faucet"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/JohnNilsson/nutrition#readme",
   "devDependencies": {
+    "@types/moment-timezone": "^0.5.8",
+    "@types/node": "^10.9.4",
+    "@types/tape": "^4.2.32",
     "JSONStream": "^1.3.4",
     "benchmark": "^2.1.4",
     "blue-tape": "^1.0.0",
@@ -28,6 +31,8 @@
     "moment-timezone": "^0.5.21",
     "node-expat": "^2.3.17",
     "tape": "^4.9.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3",
     "xml2js": "^0.4.19"
   },
   "dependencies": {}

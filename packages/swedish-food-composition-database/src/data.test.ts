@@ -1,8 +1,8 @@
-const test = require('tape');
+import test from 'tape';
 
-const {setNulls} = require('./utils');
+import { setNulls } from './utils';
 
-const data6NF = require('../data/Naringsvarde.6NF.json');
+import * as data6NF from '../data/Naringsvarde.6NF.json';
 
 for(const key of Object.keys(data6NF.Livsmedel.Naringsvarde)){
   setNulls(data6NF.Livsmedel.Naringsvarde[key].Varde,NaN);
@@ -24,7 +24,7 @@ test('6NF data has no missing values', assert => {
   assert.end();
 });
 
-function testForeignKeys(object,path,assert) {
+function testForeignKeys(object:{[key:string]:unknown}, path: string, assert: test.Test) {
   for(const key of Object.keys(object)){
     const arr = object[key];
     if(key === 'Varde'){
@@ -34,7 +34,7 @@ function testForeignKeys(object,path,assert) {
       const ix = arr.findIndex(v => v === null || v === undefined);
       assert.equals(ix, -1, path+'["'+key+'"] should have no missing values.'+ (ix == -1 ? '' : ' ['+ix+'] was: ' + arr[ix]));
     } else if (typeof arr === 'object') {
-      testForeignKeys(arr,path+'["'+key+'"]',assert);
+      testForeignKeys(arr as {[key:string]:unknown},path+'["'+key+'"]',assert);
     }
   }
 }

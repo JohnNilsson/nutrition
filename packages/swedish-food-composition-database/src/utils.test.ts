@@ -1,5 +1,5 @@
-const test = require('tape');
-const { setNulls, d, id, sortByFkFrequency } = require('./utils');
+import test from 'tape'
+import { setNulls, d, id, sortByFkFrequency } from './utils'
 
 test('id gets index of existing value', assert => {
   const val1 = 'test value 1';

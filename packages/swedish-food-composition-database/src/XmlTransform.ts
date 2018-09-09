@@ -1,16 +1,32 @@
-const {Transform} = require('stream');
-const expat = require('node-expat');
+import { Transform, TransformOptions, TransformCallback } from 'stream';
+import { createParser as _createParser, Parser } from 'node-expat';
 
-class XmlTransform extends Transform {
+interface VisitorFn<T> {
+  (this: T, text: string): void
+}
 
-  constructor(visitor,streamOptions) {
+interface VisitorObj<T> {
+  [elementName:string]: VisitorObj<T> | VisitorFn<T>
+}
+
+export type Visitor<T> = VisitorObj<T> | VisitorFn<T>;
+
+
+abstract class XmlTransform<T> extends Transform {
+
+  public readonly parser: Parser
+  private _error: Error | null;
+
+  protected abstract createVisitorState(): T
+
+  constructor(visitor: Visitor<T>, streamOptions: TransformOptions) {
     super(streamOptions);
-    this.parser = createParser(visitor,this);
+    this.parser = createParser(visitor,this.createVisitorState());
     this._error = null;
     this.parser.on('error', err => this._error = err);
   }
 
-  _transform(chunk, encoding, callback){
+  _transform(chunk: Buffer, encoding: string, callback: TransformCallback){
     try {
       if (!this.parser.parse(chunk)) {
         this._error = this.parser.getError() || new Error('Parse failed');
@@ -28,19 +44,19 @@ class XmlTransform extends Transform {
   }
 }
 
-function safe(f){
-  return function(...args){
+function safe<TS extends any[], R>(f: (this: Parser,...args: TS) => R){
+  return function(this: Parser, ...args: TS){
     try {
       f.call(this,...args);
     } catch (err){
-      this.parser.stop();
+      this.stop();
       throw err;
     }
   };
 }
 
-function createParser(rootVisitor,context={}){
-    const p = expat.createParser();
+function createParser<T>(rootVisitor: Visitor<T>, context: T){
+    const p = _createParser();
 
     const stack = [{
       elementName:'',
@@ -52,17 +68,19 @@ function createParser(rootVisitor,context={}){
 
     p.on('startElement', safe(elementName => {
       const oldFrame   = stack[stack.length-1];
-      const newVisitor = oldFrame.visitor[elementName];
-      const newFrame = {
-        elementName,
-        elementText:'',
-        visitor: newVisitor
-      };
+      const curVisitor = oldFrame.visitor as VisitorObj<T>;
+      const newVisitor = curVisitor[elementName];
 
       if(newVisitor !== undefined){
+        const newFrame = {
+          elementName,
+          elementText:'',
+          visitor: newVisitor
+        };
+
         stack.push(newFrame);
 
-        if(typeof newVisitor._startElement === 'function'){
+        if(typeof newVisitor !== 'function' && typeof newVisitor._startElement === 'function'){
           newVisitor._startElement.call(context);
         }
 
@@ -78,12 +96,12 @@ function createParser(rootVisitor,context={}){
         frame.elementText += text;
       } else {
         let path = stack.map(f => f.elementName).join('/');
-        throw new Error('Visitor for path '+ path + ' should be a function but was ' + typeof visitor);
+        throw new Error('Visitor for path '+ path + ' should be a function but was ' + typeof frame.visitor);
       }
     }));
 
     p.on('endElement', safe(elementName => {
-      const frame = stack.pop();
+      const frame = stack.pop()!;
       const v = frame.visitor;
       if(typeof v === 'function'){
         v.call(context, frame.elementText);
@@ -95,4 +113,4 @@ function createParser(rootVisitor,context={}){
     return p;
 }
 
-module.exports = XmlTransform;
+export default XmlTransform;

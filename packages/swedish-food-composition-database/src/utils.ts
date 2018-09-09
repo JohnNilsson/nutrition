@@ -1,14 +1,14 @@
-const moment = require('moment-timezone');
+import moment from 'moment-timezone';
 
-function d(dateString){
+export function d(dateString: string){
   return moment.tz(dateString,"Europe/Stockholm").toJSON()
 }
 
-const fmt0 = new Intl.NumberFormat('en',{minimumFractionDigits:0});
-const fmt1 = new Intl.NumberFormat('en',{minimumFractionDigits:1});
-const fmt2 = new Intl.NumberFormat('en',{minimumFractionDigits:2});
-const fmt3 = new Intl.NumberFormat('en',{minimumFractionDigits:3});
-function n(numberString){
+// const fmt0 = new Intl.NumberFormat('en',{minimumFractionDigits:0});
+// const fmt1 = new Intl.NumberFormat('en',{minimumFractionDigits:1});
+// const fmt2 = new Intl.NumberFormat('en',{minimumFractionDigits:2});
+// const fmt3 = new Intl.NumberFormat('en',{minimumFractionDigits:3});
+export function n(numberString: string){
   const val = Number(numberString.replace(',','.').replace(/\s/,''));
 
   // const s0 = fmt0.format(val).replace(',','\u00a0').replace('.',',');
@@ -22,8 +22,8 @@ function n(numberString){
   return val;
 }
 
-function nn(object){
-  const nn = {};
+export function nn(object:{[key:string]:string|number}){
+  const nn = {} as {[key:string]:string|number};
   for(const key of Object.keys(object)){
     const value = object[key];
     if(value === undefined || value === null || value === '' || Number.isNaN(value)){
@@ -34,7 +34,7 @@ function nn(object){
   return nn;
 }
 
-function setNulls(arr,value){
+export function setNulls<T>(arr: T[], value: T){
   for(let i = arr.length; i-- > 0;) {
     const v = arr[i];
     if(v === null || v === undefined){
@@ -44,7 +44,7 @@ function setNulls(arr,value){
 }
 
 
-function id(value,array) {
+export function id<T>(value:T|null|undefined,array:Array<T|null>) {
   if(value === undefined){
     value = null;
   }
@@ -59,8 +59,9 @@ function id(value,array) {
   return id;
 }
 
-function sortByFkFrequency(fkArr,dataArr){
-  const histogram = new Array(dataArr.length).fill(0);
+
+export function sortByFkFrequency(fkArr:number[],dataArr:unknown[]){
+  const histogram = new Array(dataArr.length).fill(0) as number[];
   for(let i = fkArr.length; i-->0;){
     const key = fkArr[i];
     histogram[key]++;
@@ -83,5 +84,3 @@ function sortByFkFrequency(fkArr,dataArr){
     fkArr[i] = newKey;
   }
 }
-
-module.exports = {setNulls,nn,n,d,id,sortByFkFrequency};
