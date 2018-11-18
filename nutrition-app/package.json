@@ -21,8 +21,13 @@
     "deploy": "gh-pages -d build"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.9",
+    "@types/node": "^10.12.9",
+    "@types/react": "^16.7.6",
+    "@types/react-dom": "^16.0.9",
     "gh-pages": "^2.0.1",
-    "react-scripts": "^2.0.4"
+    "react-scripts": "^2.0.4",
+    "typescript": "^3.1.6"
   },
   "browserslist": [
     ">0.2%",

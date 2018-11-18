@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Input, Menu } from 'semantic-ui-react'
+import { Input, Menu, MenuItemProps } from 'semantic-ui-react'
 
 const MAIN  = 'hem';
 const FOODS = 'mat';
@@ -7,7 +7,8 @@ const FOODS = 'mat';
 export default class TopMenu extends Component {
   state = { activeItem: MAIN }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick: (event: React.MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => void
+  = (e, { name }) => this.setState({ activeItem: name })
 
   render() {
     const { activeItem } = this.state

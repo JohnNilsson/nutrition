@@ -5,6 +5,7 @@ import NutritionStats from "./components/NurtitionStats";
 import SelectedFoods from "./components/SelectedFoods";
 
 import "semantic-ui-css/semantic.min.css";
+import { FlexDirectionProperty } from "csstype";
 
 const appStyle = {
   height: "100vh"
@@ -13,16 +14,18 @@ const appStyle = {
 const floxColStyles = {
   height: "100%",
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column" as FlexDirectionProperty
 };
 
-const FlexCol = ({ children }) => <div style={floxColStyles}>{children}</div>;
+const FlexCol: React.FunctionComponent
+= ({ children }) => <div style={floxColStyles}>{children}</div>;
 
 const flexColItemStyle = {
   flex: "1"
 };
 
-const FlexColItem = ({ children }) => (
+const FlexColItem: React.FunctionComponent
+= ({ children }) => (
   <div style={flexColItemStyle}>{children}</div>
 );
 
