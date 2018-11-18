@@ -21,9 +21,13 @@
     "deploy": "gh-pages -d build"
   },
   "devDependencies": {
-    "ajv": "^6.5.4",
-    "eslint-config-react-app": "^2.1.0",
-    "gh-pages": "^1.1.0",
-    "react-scripts": "^1.1.5"
-  }
+    "gh-pages": "^2.0.1",
+    "react-scripts": "^2.0.4"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
