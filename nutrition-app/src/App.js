@@ -28,15 +28,17 @@ const FlexColItem = ({ children }) => (
 
 const App = () => (
   <div className="App" style={appStyle}>
-    <TopMenu />
-    <FlexCol>
-      <FlexColItem>
-        <SelectedFoods />
-      </FlexColItem>
-      <FlexColItem>
-        <NutritionStats />
-      </FlexColItem>
-    </FlexCol>
+    <React.StrictMode>
+      <TopMenu />
+      <FlexCol>
+        <FlexColItem>
+          <SelectedFoods />
+        </FlexColItem>
+        <FlexColItem>
+          <NutritionStats />
+        </FlexColItem>
+      </FlexCol>
+    </React.StrictMode>
   </div>
 );
 
