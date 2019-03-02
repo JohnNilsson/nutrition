@@ -6,11 +6,11 @@
   "private": true,
   "homepage": "http://JohnNilsson.github.io/nutrition",
   "dependencies": {
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
     "react-virtualized": "^9.21.0",
-    "semantic-ui-css": "^2.4.0",
-    "semantic-ui-react": "^0.82.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0",
     "swedish-food-composition-database": "file:../swedish-food-composition-database"
   },
   "scripts": {
@@ -22,14 +22,14 @@
     "deploy": "gh-pages -d build"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.9",
-    "@types/node": "^10.12.9",
-    "@types/react": "^16.7.6",
-    "@types/react-dom": "^16.0.9",
-    "@types/react-virtualized": "^9.18.9",
+    "@types/jest": "^24.0.9",
+    "@types/node": "^11.10.0",
+    "@types/react": "^16.8.6",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-virtualized": "^9.18.12",
     "gh-pages": "^2.0.1",
-    "react-scripts": "^2.0.4",
-    "typescript": "^3.1.6"
+    "react-scripts": "^2.1.5",
+    "typescript": "^3.3.3333"
   },
   "browserslist": [
     ">0.2%",
