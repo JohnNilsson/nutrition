@@ -1,33 +1,38 @@
 import React, { Component } from "react";
-import { Input, Menu, MenuItemProps } from "semantic-ui-react";
+import { observer } from "mobx-react";
+import { Input, Menu } from "semantic-ui-react";
+import { Navigation, Page } from "../state/Navigation";
 
 const MAIN = "hem";
 const FOODS = "mat";
+const DATA = "data";
 
-export default class TopMenu extends Component {
-  state = { activeItem: MAIN };
-
-  handleItemClick: (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    data: MenuItemProps
-  ) => void = (e, { name }) => this.setState({ activeItem: name });
-
+@observer
+export default class TopMenu extends Component<{
+  store: typeof Navigation.Type;
+}> {
   render() {
-    const { activeItem } = this.state;
+    const { page, go } = this.props.store;
 
     return (
       <Menu>
         <Menu.Item
           icon="home"
           name={MAIN}
-          active={activeItem === MAIN}
-          onClick={this.handleItemClick}
+          active={page === Page.Home}
+          onClick={() => go(Page.Home)}
         />
         <Menu.Item
           icon="food"
           name={FOODS}
-          active={activeItem === FOODS}
-          onClick={this.handleItemClick}
+          active={page === Page.Foods}
+          onClick={() => go(Page.Foods)}
+        />
+        <Menu.Item
+          icon="database"
+          name={DATA}
+          active={page === Page.Data}
+          onClick={() => go(Page.Data)}
         />
         <Menu.Menu position="right">
           <Menu.Item>
