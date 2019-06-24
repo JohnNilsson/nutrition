@@ -3,10 +3,11 @@ import * as React from "react";
 import TopMenu from "./components/TopMenu";
 // import NutritionStats from "./components/NurtitionStats";
 // import SelectedFoods from "./components/SelectedFoods";
-const NutritionTable = React.lazy(() => import("./components/NutritionTable"));
 
 import "semantic-ui-css/semantic.min.css";
 import { FlexDirectionProperty } from "csstype";
+
+const NutritionTable = React.lazy(() => import("./components/NutritionTable"));
 
 const appStyle = {
   height: "100vh"

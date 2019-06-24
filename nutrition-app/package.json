@@ -8,7 +8,8 @@
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-virtualized": "^9.21.1",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-window": "^1.8.3",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.2",
     "swedish-food-composition-database": "file:../swedish-food-composition-database"
@@ -27,7 +28,8 @@
     "@types/node": "^12.0.10",
     "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
-    "@types/react-virtualized": "^9.21.2",
+    "@types/react-virtualized-auto-sizer": "^1.0.0",
+    "@types/react-window": "^1.8.0",
     "gh-pages": "^2.0.1",
     "react-scripts": "^3.0.1",
     "typescript": "^3.5.2"
