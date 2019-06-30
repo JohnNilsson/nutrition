@@ -1,17 +1,16 @@
 import * as React from "react";
-import { observer } from "mobx-react";
-
-import { RootStore } from "./state";
-
-import TopMenu from "./components/TopMenu";
-// import NutritionStats from "./components/NurtitionStats";
-// import SelectedFoods from "./components/SelectedFoods";
+import { observer } from "mobx-react-lite";
 
 import "semantic-ui-css/semantic.min.css";
 import { FlexDirectionProperty } from "csstype";
-import { Page, Navigation } from "./state/Navigation";
 
-const NutritionTable = React.lazy(() => import("./components/NutritionTable"));
+import { StoreProvider, useStore } from "./store";
+
+import TopMenu from "./components/TopMenu";
+import Home from "./components/Home";
+import NutritionTable from "./components/NutritionTable";
+
+import { Page } from "./state/Navigation";
 
 const appStyle = {
   height: "100vh"
@@ -35,35 +34,30 @@ const FlexColItem: React.FunctionComponent = ({ children }) => (
   <div style={flexColItemStyle}>{children}</div>
 );
 
-const store = RootStore.create({
-  nav: Navigation.create()
-});
-
 const CurrentPage = observer(() => {
+  var store = useStore();
   switch (store.nav.page) {
     case Page.Data:
-      return (
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <NutritionTable />
-        </React.Suspense>
-      );
+      return <NutritionTable />;
     case Page.Foods:
       return <div>Foods</div>;
     case Page.Home:
     default:
-      return <div>Home</div>;
+      return <Home />;
   }
 });
 
 const App = () => (
   <div className="App" style={appStyle}>
     <React.StrictMode>
-      <TopMenu store={store.nav} />
-      <FlexCol>
-        <FlexColItem>
-          <CurrentPage />
-        </FlexColItem>
-      </FlexCol>
+      <StoreProvider>
+        <TopMenu />
+        <FlexCol>
+          <FlexColItem>
+            <CurrentPage />
+          </FlexColItem>
+        </FlexCol>
+      </StoreProvider>
     </React.StrictMode>
   </div>
 );

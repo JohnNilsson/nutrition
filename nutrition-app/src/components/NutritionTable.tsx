@@ -1,4 +1,6 @@
 import React from "react";
+import { useStore } from "../store";
+import { State } from "../state/Foods";
 
 import {
   VariableSizeGrid as Grid,
@@ -7,47 +9,55 @@ import {
 
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import db from "swedish-food-composition-database/data/Naringsvarde.6NF.json";
+import { observer } from "mobx-react-lite";
 
-const nutrientName = db.Naringsamne.Namn;
-const foodName = db.Livsmedel.Namn;
-const foodNutrients = db.Livsmedel.Naringsvarde;
-const nutrientKey = db.Naringsamne.Forkortning;
+export default observer(() => {
+  const store = useStore();
+  if (store.foods.state !== State.Success) {
+    return <div>Loading...</div>;
+  }
+  const db = store.foods.data;
 
-const headerData = (columnIndex: number) =>
-  columnIndex === 0 ? "Name" : nutrientName[columnIndex - 1];
+  const nutrientName = db.Naringsamne.Namn;
+  const foodName = db.Livsmedel.Namn;
+  const foodNutrients = db.Livsmedel.Naringsvarde;
+  const nutrientKey = db.Naringsamne.Forkortning;
 
-const rowData = (rowIndex: number, columnIndex: number) =>
-  columnIndex === 0
-    ? foodName[rowIndex - 1]
-    : foodNutrients[nutrientKey[columnIndex - 1]].Varde[rowIndex - 1];
+  const headerData = (columnIndex: number) =>
+    columnIndex === 0 ? "Name" : nutrientName[columnIndex - 1];
 
-const cellData = (rowIndex: number, columnIndex: number) =>
-  rowIndex === 0 ? headerData(columnIndex) : rowData(rowIndex, columnIndex);
+  const rowData = (rowIndex: number, columnIndex: number) =>
+    columnIndex === 0
+      ? foodName[rowIndex - 1]
+      : foodNutrients[nutrientKey[columnIndex - 1]].Varde[rowIndex - 1];
 
-const Cell = ({ columnIndex, rowIndex, style }: GridChildComponentProps) => (
-  <div style={style}>{cellData(rowIndex, columnIndex)}</div>
-);
+  const cellData = (rowIndex: number, columnIndex: number) =>
+    rowIndex === 0 ? headerData(columnIndex) : rowData(rowIndex, columnIndex);
 
-const columnCount = 1 + nutrientName.length;
-const rowCount = 1 + foodName.length;
+  const Cell = ({ columnIndex, rowIndex, style }: GridChildComponentProps) => (
+    <div style={style}>{cellData(rowIndex, columnIndex)}</div>
+  );
 
-const rowHeight = (index: number) => (index === 0 ? 60 : 20);
-const columnWidth = (index: number) => (index === 0 ? 500 : 100);
+  const columnCount = 1 + nutrientName.length;
+  const rowCount = 1 + foodName.length;
 
-export default () => (
-  <AutoSizer>
-    {({ height, width }) => (
-      <Grid
-        columnCount={columnCount}
-        columnWidth={columnWidth}
-        height={height}
-        rowCount={rowCount}
-        rowHeight={rowHeight}
-        width={width}
-      >
-        {Cell}
-      </Grid>
-    )}
-  </AutoSizer>
-);
+  const rowHeight = (index: number) => (index === 0 ? 60 : 20);
+  const columnWidth = (index: number) => (index === 0 ? 500 : 100);
+
+  return (
+    <AutoSizer>
+      {({ height, width }) => (
+        <Grid
+          columnCount={columnCount}
+          columnWidth={columnWidth}
+          height={height}
+          rowCount={rowCount}
+          rowHeight={rowHeight}
+          width={width}
+        >
+          {Cell}
+        </Grid>
+      )}
+    </AutoSizer>
+  );
+});
