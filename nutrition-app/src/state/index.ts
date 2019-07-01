@@ -12,9 +12,6 @@ export type AppState = typeof AppState.Type;
 
 export const createAppState = () => {
   const nav = Navigation.create();
-
   const foods = Foods.create();
-  foods.fetchFoods();
-
   return AppState.create({ nav, foods });
 };

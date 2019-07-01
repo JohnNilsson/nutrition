@@ -16,7 +16,7 @@ export default observer(() => {
   if (store.foods.state !== State.Success) {
     return <div>Loading...</div>;
   }
-  const db = store.foods.data;
+  const db = store.foods.data!;
 
   const nutrientName = db.Naringsamne.Namn;
   const foodName = db.Livsmedel.Namn;

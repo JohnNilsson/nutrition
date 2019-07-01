@@ -11,7 +11,6 @@ type Unpack<T> = T extends Promise<infer U> ? U : T;
 type Db = Unpack<ReturnType<typeof fetchData>>;
 
 export enum State {
-  Waiting,
   Pending,
   Success,
   Failure
@@ -19,14 +18,16 @@ export enum State {
 
 export const Foods = types
   .model("Foods", {
-    state: State.Waiting,
-    data: types.frozen<Db>()
+    state: State.Pending,
+    data: types.frozen<Db | null>(null)
   })
+  .volatile(self => ({
+    dataPromise: fetchData()
+  }))
   .actions(self => ({
-    fetchFoods: flow(function* fetchFoods() {
+    afterCreate: flow(function* afterCreate() {
       try {
-        self.state = State.Pending;
-        self.data = yield fetchData();
+        self.data = yield self.dataPromise;
         self.state = State.Success;
       } catch (error) {
         self.state = State.Failure;
