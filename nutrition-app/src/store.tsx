@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext, createContext, FunctionComponent } from "react";
 import { createAppState, AppState } from "./state";
 import { useLocalStore } from "mobx-react-lite";
 
-const storeContext = React.createContext<AppState | null>(null);
+const storeContext = createContext<AppState | null>(null);
 
-export const StoreProvider: React.FunctionComponent = ({ children }) => {
+export const StoreProvider: FunctionComponent = ({ children }) => {
   const store = useLocalStore(createAppState);
   return (
     <storeContext.Provider value={store}>{children}</storeContext.Provider>
@@ -12,7 +12,7 @@ export const StoreProvider: React.FunctionComponent = ({ children }) => {
 };
 
 export const useStore = () => {
-  const store = React.useContext(storeContext);
+  const store = useContext(storeContext);
   if (!store) {
     throw new Error("Store context not initialized");
   }
