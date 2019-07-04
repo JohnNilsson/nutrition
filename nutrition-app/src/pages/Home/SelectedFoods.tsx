@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { debounce, escapeRegExp } from "lodash-es";
+import { debounce } from "lodash-es";
 import { List, Search, StrictSearchProps } from "semantic-ui-react";
-import { useStore } from "../store";
+
+import index from "../../services/FoodIndex";
 
 // Some type gymnasitcs to get the search properties properly typed
 interface Result {
@@ -17,24 +18,7 @@ interface SearchProps extends Require<SearchState, "onSearchChange"> {
   results: Result[];
 }
 
-const searchDb = (names: string[], query: string) => {
-  const results = [] as Result[];
-
-  const match = new RegExp(escapeRegExp(query), "i");
-  for (let i = 0; i < names.length; i++) {
-    const name = names[i];
-    if (match.test(name)) {
-      results.push({ title: name });
-      if (results.length === 10) {
-        break;
-      }
-    }
-  }
-  return results;
-};
-
 const useSearchState = () => {
-  const store = useStore();
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([] as Result[]);
@@ -47,11 +31,11 @@ const useSearchState = () => {
     }
     setLoading(true);
 
-    store.foods.dataPromise
-      .then(db => {
+    index
+      .findAsync(query, 10)
+      .then(results => {
         setLoading(false);
-        const results = searchDb(db.Livsmedel.Namn, query);
-        setResults(results);
+        setResults(results.map(r => ({ title: r.name })));
       })
       .catch(err => {
         setLoading(false);

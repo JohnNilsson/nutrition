@@ -1,6 +1,6 @@
-import React from "react";
-import { useStore } from "../store";
-import { State } from "../state/Foods";
+import React, { FunctionComponent } from "react";
+import { observer } from "mobx-react-lite";
+import { fromPromise } from "mobx-utils";
 
 import {
   VariableSizeGrid as Grid,
@@ -9,15 +9,12 @@ import {
 
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import { observer } from "mobx-react-lite";
+import dbPromise, { Db } from "../../services/FoodData";
 
-export default observer(() => {
-  const store = useStore();
-  if (store.foods.state !== State.Success) {
+const NutritionTable: FunctionComponent<{ db: Db }> = ({ db }) => {
+  if (db == null) {
     return <div>Loading...</div>;
   }
-  const db = store.foods.data!;
-
   const nutrientName = db.Naringsamne.Namn;
   const foodName = db.Livsmedel.Namn;
   const foodNutrients = db.Livsmedel.Naringsvarde;
@@ -60,4 +57,16 @@ export default observer(() => {
       )}
     </AutoSizer>
   );
-});
+};
+
+const dbPromiseObservable = fromPromise(dbPromise);
+
+const NutritionTableLoader: FunctionComponent = observer(() =>
+  dbPromiseObservable.case({
+    fulfilled: db => <NutritionTable db={db} />,
+    pending: () => <div>Loading...</div>,
+    rejected: err => <div>{err.message}</div>
+  })
+);
+
+export default NutritionTableLoader;

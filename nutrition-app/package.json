@@ -10,6 +10,7 @@
     "mobx": "^5.10.1",
     "mobx-react-lite": "^1.4.1",
     "mobx-state-tree": "^3.14.0",
+    "mobx-utils": "5.4.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-virtualized-auto-sizer": "^1.0.2",

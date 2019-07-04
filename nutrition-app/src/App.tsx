@@ -1,16 +1,13 @@
-import * as React from "react";
-import { observer } from "mobx-react-lite";
+import React, { FunctionComponent, useState } from "react";
 
 import "semantic-ui-css/semantic.min.css";
 import { FlexDirectionProperty } from "csstype";
 
-import { StoreProvider, useStore } from "./store";
+import Home from "./pages/Home";
+import NutritionTable from "./pages/Data";
 
-import TopMenu from "./components/TopMenu";
-import Home from "./components/Home";
-import NutritionTable from "./components/NutritionTable";
-
-import { Page } from "./state/Navigation";
+import { AppState } from "./state/";
+import { Menu } from "semantic-ui-react";
 
 const appStyle = {
   height: "100vh"
@@ -22,7 +19,7 @@ const floxColStyles = {
   flexDirection: "column" as FlexDirectionProperty
 };
 
-const FlexCol: React.FunctionComponent = ({ children }) => (
+const FlexCol: FunctionComponent = ({ children }) => (
   <div style={floxColStyles}>{children}</div>
 );
 
@@ -30,36 +27,52 @@ const flexColItemStyle = {
   flex: "1"
 };
 
-const FlexColItem: React.FunctionComponent = ({ children }) => (
+const FlexColItem: FunctionComponent = ({ children }) => (
   <div style={flexColItemStyle}>{children}</div>
 );
 
-const CurrentPage = observer(() => {
-  var store = useStore();
-  switch (store.nav.page) {
-    case Page.Data:
-      return <NutritionTable />;
-    case Page.Foods:
-      return <div>Foods</div>;
-    case Page.Home:
-    default:
-      return <Home />;
+const pages = {
+  home: {
+    icon: "home",
+    name: "Hem",
+    render: () => <Home />
+  },
+  foods: {
+    icon: "food",
+    name: "Mat",
+    render: () => <div>Foods</div>
+  },
+  data: {
+    icon: "database",
+    name: "Data",
+    render: () => <NutritionTable />
   }
-});
+};
 
-const App = () => (
-  <div className="App" style={appStyle}>
-    <React.StrictMode>
-      <StoreProvider>
-        <TopMenu />
+type Page = keyof typeof pages;
+
+const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
+  const [page, go] = useState<Page>("home");
+  return (
+    <div className="App" style={appStyle}>
+      <React.StrictMode>
+        <Menu>
+          {Object.entries(pages).map(([key, def]) => (
+            <Menu.Item
+              key={key}
+              icon={def.icon}
+              name={def.name}
+              active={page === key}
+              onClick={() => go(key as Page)}
+            />
+          ))}
+        </Menu>
         <FlexCol>
-          <FlexColItem>
-            <CurrentPage />
-          </FlexColItem>
+          <FlexColItem>{pages[page].render()}</FlexColItem>
         </FlexCol>
-      </StoreProvider>
-    </React.StrictMode>
-  </div>
-);
+      </React.StrictMode>
+    </div>
+  );
+};
 
 export default App;
