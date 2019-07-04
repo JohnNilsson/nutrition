@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { debounce } from "lodash-es";
-import { List, Search, StrictSearchProps } from "semantic-ui-react";
+import { Search, StrictSearchProps } from "semantic-ui-react";
 
-import index from "../../services/FoodIndex";
+import index from "../../../services/FoodIndex";
 
 // Some type gymnasitcs to get the search properties properly typed
 interface Result {
@@ -60,16 +60,4 @@ const AddFoodSearch = () => {
   return <Search {...searchProps} />;
 };
 
-const SelectedFood = () => (
-  <>
-    <AddFoodSearch />
-    <List>
-      <List.Item>
-        <List.Header>Broccoli</List.Header>
-        11 g
-      </List.Item>
-    </List>
-  </>
-);
-
-export default SelectedFood;
+export default AddFoodSearch;
