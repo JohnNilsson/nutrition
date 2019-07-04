@@ -19,7 +19,7 @@ const SelectedFoodsList: FunctionComponent<{ state: AppState }> = observer(
     return (
       <List>
         {foods.map(food => (
-          <FoodItem food={food} />
+          <FoodItem key={food.id} food={food} />
         ))}
       </List>
     );
