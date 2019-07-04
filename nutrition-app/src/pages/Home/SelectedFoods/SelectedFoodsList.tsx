@@ -1,11 +1,17 @@
 import React, { FunctionComponent } from "react";
-import { List } from "semantic-ui-react";
+import { List, Icon } from "semantic-ui-react";
 import { AppState, Food } from "../../../state";
 import { observer } from "mobx-react-lite";
 
-const FoodItem: FunctionComponent<{ food: Food }> = observer(({ food }) => (
+const FoodItem: FunctionComponent<{
+  food: Food;
+  onDelete: () => void;
+}> = observer(({ food, onDelete }) => (
   <List.Item>
-    <List.Header>{food.name}</List.Header>
+    <List.Header>
+      <Icon link name="delete" onClick={onDelete} />
+      {food.name}
+    </List.Header>
     {food.ammount} g
   </List.Item>
 ));
@@ -19,7 +25,11 @@ const SelectedFoodsList: FunctionComponent<{ state: AppState }> = observer(
     return (
       <List>
         {foods.map(food => (
-          <FoodItem key={food.id} food={food} />
+          <FoodItem
+            key={food.id}
+            food={food}
+            onDelete={() => state.removeFood(food.id)}
+          />
         ))}
       </List>
     );

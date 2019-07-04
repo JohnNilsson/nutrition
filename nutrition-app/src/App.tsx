@@ -8,6 +8,7 @@ import NutritionTable from "./pages/Data";
 
 import { AppState } from "./state/";
 import { Menu } from "semantic-ui-react";
+import AddFoodSearch from "./pages/Home/SelectedFoods/AddFoodSearch";
 
 const appStyle = {
   height: "100vh"
@@ -66,6 +67,11 @@ const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
               onClick={() => go(key as Page)}
             />
           ))}
+          <Menu.Menu position="right">
+            <Menu.Item>
+              <AddFoodSearch state={state} />
+            </Menu.Item>
+          </Menu.Menu>
         </Menu>
         <FlexCol>
           <FlexColItem>{pages[page].render(state)}</FlexColItem>

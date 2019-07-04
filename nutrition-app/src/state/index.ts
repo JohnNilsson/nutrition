@@ -25,6 +25,9 @@ export const AppState = types
           ammount: 100
         });
         self.foods.put(food);
+      },
+      removeFood(id: number) {
+        self.foods.delete(id as any);
       }
     };
   });
