@@ -2,6 +2,7 @@ import dbPromise from "./FoodData";
 import { escapeRegExp } from "lodash-es";
 
 interface Result {
+  id: number;
   name: string;
 }
 
@@ -16,7 +17,7 @@ const searchDb = (names: string[], query: string, maxResults: number) => {
   for (let i = 0; i < names.length; i++) {
     const name = names[i];
     if (match.test(name)) {
-      results.push({ name });
+      results.push({ id: i, name });
       if (results.length === maxResults) {
         break;
       }

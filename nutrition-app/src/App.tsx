@@ -35,17 +35,17 @@ const pages = {
   home: {
     icon: "home",
     name: "Hem",
-    render: () => <Home />
+    render: (state: AppState) => <Home state={state} />
   },
   foods: {
     icon: "food",
     name: "Mat",
-    render: () => <div>Foods</div>
+    render: (state: AppState) => <div>Foods</div>
   },
   data: {
     icon: "database",
     name: "Data",
-    render: () => <NutritionTable />
+    render: (state: AppState) => <NutritionTable />
   }
 };
 
@@ -68,7 +68,7 @@ const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
           ))}
         </Menu>
         <FlexCol>
-          <FlexColItem>{pages[page].render()}</FlexColItem>
+          <FlexColItem>{pages[page].render(state)}</FlexColItem>
         </FlexCol>
       </React.StrictMode>
     </div>

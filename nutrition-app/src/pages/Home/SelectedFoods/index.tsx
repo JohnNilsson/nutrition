@@ -1,12 +1,13 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import AddFoodSearch from "./AddFoodSearch";
 import SelectedFoodsList from "./SelectedFoodsList";
+import { AppState } from "../../../state";
 
-const SelectedFoodS = () => (
+const SelectedFoods: FunctionComponent<{ state: AppState }> = ({ state }) => (
   <>
-    <AddFoodSearch />
-    <SelectedFoodsList />
+    <AddFoodSearch state={state} />
+    <SelectedFoodsList state={state} />
   </>
 );
 
-export default SelectedFoodS;
+export default SelectedFoods;
