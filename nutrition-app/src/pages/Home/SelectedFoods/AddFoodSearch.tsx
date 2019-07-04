@@ -1,6 +1,6 @@
 import React, { useState, FunctionComponent } from "react";
 import { debounce } from "lodash-es";
-import { Search, StrictSearchProps } from "semantic-ui-react";
+import { Search, SearchProps } from "semantic-ui-react";
 
 import index from "../../../services/FoodIndex";
 import { AppState } from "../../../state";
@@ -11,17 +11,15 @@ interface Result {
   title: string;
   description?: string;
 }
-type Require<T, TRequired extends keyof T> = T & Required<Pick<T, TRequired>>;
-interface SearchState
-  extends Require<StrictSearchProps, "loading" | "value" | "results"> {
-  results: Result[];
-}
-interface SearchProps
-  extends Require<SearchState, "onSearchChange" | "onResultSelect"> {
-  results: Result[];
+
+interface AddFoodSearchProps extends SearchProps {
+  state: AppState;
 }
 
-const AddFoodSearch: FunctionComponent<{ state: AppState }> = ({ state }) => {
+const AddFoodSearch: FunctionComponent<AddFoodSearchProps> = ({
+  state,
+  ...props
+}) => {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([] as Result[]);
@@ -60,7 +58,7 @@ const AddFoodSearch: FunctionComponent<{ state: AppState }> = ({ state }) => {
       state.addFood(id, title);
     }
   };
-  return <Search {...searchProps} />;
+  return <Search {...props} {...searchProps} />;
 };
 
 export default AddFoodSearch;
