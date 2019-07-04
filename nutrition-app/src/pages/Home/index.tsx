@@ -8,7 +8,7 @@ export interface HomeProps {}
 
 const Home = (props: HomeProps) => (
   <Grid columns="equal">
-    <Grid.Column width={3}>
+    <Grid.Column width={5}>
       <SelectedFoods />
     </Grid.Column>
     <Grid.Column>
