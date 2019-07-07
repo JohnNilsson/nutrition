@@ -14,7 +14,7 @@ const pages = {
   home: {
     icon: "home",
     name: "Hem",
-    render: (state: AppState) => <NutritionStats />
+    render: (state: AppState) => <NutritionStats state={state} />
   },
   foods: {
     icon: "food",
@@ -32,6 +32,7 @@ type Page = keyof typeof pages;
 
 const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
   const [page, go] = useState<Page>("home");
+  console.log("App");
   return (
     <React.StrictMode>
       <div
@@ -60,7 +61,16 @@ const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
             </Menu.Item>
           </Menu>
         </div>
-        <div style={{ flex: "1 1 auto" }}>{pages[page].render(state)}</div>
+        <div
+          style={{
+            flex: "1 1 auto",
+            padding: "1em",
+            overflowY: "scroll",
+            height: "100%"
+          }}
+        >
+          {pages[page].render(state)}
+        </div>
       </div>
     </React.StrictMode>
   );

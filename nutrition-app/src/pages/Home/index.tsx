@@ -13,7 +13,7 @@ const Home: FunctionComponent<{ state: AppState }> = ({ state }) => (
       <SelectedFoods state={state} />
     </Grid.Column>
     <Grid.Column>
-      <NutritionStats />
+      <NutritionStats state={state} />
     </Grid.Column>
   </Grid>
 );
