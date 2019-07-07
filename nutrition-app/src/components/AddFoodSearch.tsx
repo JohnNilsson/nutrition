@@ -2,8 +2,8 @@ import React, { useState, FunctionComponent } from "react";
 import { debounce } from "lodash-es";
 import { Search, SearchProps } from "semantic-ui-react";
 
-import index from "../../../services/FoodIndex";
-import { AppState } from "../../../state";
+import index from "../services/FoodIndex";
+import { AppState } from "../state";
 
 // Some type gymnasitcs to get the search properties properly typed
 interface Result {

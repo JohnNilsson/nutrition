@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { List, Icon } from "semantic-ui-react";
-import { AppState, Food } from "../../../state";
+import { AppState, Food } from "../state";
 import { observer } from "mobx-react-lite";
 
 const FoodItem: FunctionComponent<{

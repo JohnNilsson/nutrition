@@ -5,14 +5,14 @@ import "semantic-ui-css/semantic.min.css";
 
 import { AppState } from "./state/";
 
-import AddFoodSearch from "./pages/Home/SelectedFoods/AddFoodSearch";
-import SelectedFoods from "./pages/Home/SelectedFoods";
-import NutritionStats from "./pages/Home/NurtitionStats";
+import AddFoodSearch from "./components/AddFoodSearch";
+import SelectedFoods from "./components/SelectedFoods";
+import NutritionStats from "./pages/Stats";
 import NutritionTable from "./pages/Data";
 
 const pages = {
-  home: {
-    icon: "home",
+  stats: {
+    icon: "stats",
     name: "Hem",
     render: (state: AppState) => <NutritionStats state={state} />
   },
@@ -31,7 +31,7 @@ const pages = {
 type Page = keyof typeof pages;
 
 const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
-  const [page, go] = useState<Page>("home");
+  const [page, go] = useState<Page>("stats");
   console.log("App");
   return (
     <React.StrictMode>
