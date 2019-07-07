@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import { observer } from "mobx-react-lite";
 import { fromPromise } from "mobx-utils";
 
@@ -11,7 +11,10 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import dbPromise, { Db } from "../../services/FoodData";
 
-const NutritionTable: FunctionComponent<{ db: Db }> = ({ db }) => {
+interface NutritionTableProps {
+  db: Db;
+}
+function NutritionTable({ db }: NutritionTableProps) {
   if (db == null) {
     return <div>Loading...</div>;
   }
@@ -57,16 +60,16 @@ const NutritionTable: FunctionComponent<{ db: Db }> = ({ db }) => {
       )}
     </AutoSizer>
   );
-};
+}
 
 const dbPromiseObservable = fromPromise(dbPromise);
 
-const NutritionTableLoader: FunctionComponent = observer(() =>
-  dbPromiseObservable.case({
+const NutritionTableLoader = observer(function NutritionTableLoader() {
+  return dbPromiseObservable.case({
     fulfilled: db => <NutritionTable db={db} />,
     pending: () => <div>Loading...</div>,
     rejected: err => <div>{err.message}</div>
-  })
-);
+  });
+});
 
 export default NutritionTableLoader;

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { useState } from "react";
 import { Menu } from "semantic-ui-react";
 
 import "semantic-ui-css/semantic.min.css";
@@ -12,7 +12,7 @@ import NutritionTable from "./pages/Data";
 
 const pages = {
   stats: {
-    icon: "stats",
+    icon: "home",
     name: "Hem",
     render: (state: AppState) => <NutritionStats state={state} />
   },
@@ -30,9 +30,12 @@ const pages = {
 
 type Page = keyof typeof pages;
 
-const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
+interface AppProps {
+  state: AppState;
+}
+function App({ state }: AppProps) {
   const [page, go] = useState<Page>("stats");
-  console.log("App");
+
   return (
     <React.StrictMode>
       <div
@@ -74,6 +77,6 @@ const App: FunctionComponent<{ state: AppState }> = ({ state }) => {
       </div>
     </React.StrictMode>
   );
-};
+}
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent } from "react";
+import React, { useState } from "react";
 import { debounce } from "lodash-es";
 import { Search, SearchProps } from "semantic-ui-react";
 
@@ -15,11 +15,7 @@ interface Result {
 interface AddFoodSearchProps extends SearchProps {
   state: AppState;
 }
-
-const AddFoodSearch: FunctionComponent<AddFoodSearchProps> = ({
-  state,
-  ...props
-}) => {
+function AddFoodSearch({ state, ...props }: AddFoodSearchProps) {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([] as Result[]);
@@ -59,6 +55,6 @@ const AddFoodSearch: FunctionComponent<AddFoodSearchProps> = ({
     }
   };
   return <Search {...props} {...searchProps} />;
-};
+}
 
 export default AddFoodSearch;

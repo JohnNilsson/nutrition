@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState } from "react";
-import { observer, useObserver } from "mobx-react-lite";
+import React from "react";
+import { observer } from "mobx-react-lite";
 import { fromPromise } from "mobx-utils";
 
 import { AppState } from "../../state";
@@ -10,14 +10,18 @@ import dbPromise, {
   Nutrient
 } from "../../services/FoodData";
 import { Statistic, Card, Container } from "semantic-ui-react";
-import { trace } from "mobx";
 import { round } from "lodash-es";
 
-const NutrientStat: FunctionComponent<{
+interface NutrientStatProps {
   nutrient: Nutrient;
   state: AppState;
   db: Db;
-}> = observer(({ nutrient, state, db }) => {
+}
+const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
+  nutrient,
+  state,
+  db
+}) {
   let value = 0;
   for (const food of state.foods.values()) {
     const nutrientValue = getNutritientValue(db, nutrient.id, food.id);
@@ -37,39 +41,35 @@ const NutrientStat: FunctionComponent<{
   );
 });
 
-const NutritionStats: FunctionComponent<{
+interface NutritionStatProps {
   state: AppState;
   db: Db;
-}> = ({ state, db }) => (
-  <Container fluid textAlign="center">
-    <Card.Group>
-      {getNutritientTypes(db).map(n => (
-        <NutrientStat key={n.id} nutrient={n} state={state} db={db} />
-      ))}
-    </Card.Group>
-  </Container>
-);
+}
+function NutritionStats({ state, db }: NutritionStatProps) {
+  return (
+    <Container fluid textAlign="center">
+      <Card.Group>
+        {getNutritientTypes(db).map(n => (
+          <NutrientStat key={n.id} nutrient={n} state={state} db={db} />
+        ))}
+      </Card.Group>
+    </Container>
+  );
+}
 
-//const dbPromiseObservable = fromPromise(dbPromise);
+const dbPromiseObservable = fromPromise(dbPromise);
 
-const NutritionStatsLoader: FunctionComponent<{ state: AppState }> = ({
-  state
-}) => {
-  const [dbPromiseObservable] = useState(() => fromPromise(dbPromise));
-  return useObserver(() => {
-    const element = dbPromiseObservable.case({
+interface NutritionStatsLoaderProps {
+  state: AppState;
+}
+const NutritionStatsLoader = observer<NutritionStatsLoaderProps>(
+  function NutritionStatsLoader({ state }) {
+    return dbPromiseObservable.case({
       fulfilled: db => <NutritionStats db={db} state={state} />,
       pending: () => <div>Loading...</div>,
       rejected: err => <div>{err.message}</div>
     });
-    trace();
-    console.log(
-      "NutritionStatsLoader",
-      dbPromiseObservable.state,
-      element.type
-    );
-    return element;
-  });
-};
+  }
+);
 
 export default NutritionStatsLoader;
