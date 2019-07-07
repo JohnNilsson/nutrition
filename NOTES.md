@@ -88,6 +88,9 @@ https://github.com/LZMA-JS/LZMA-JS
 
 ### Nutritinal data
 
+http://qualify.pohodesign.cz/
+https://quisper.eu/
+
 https://github.com/nutritionix
 https://spoonacular.com/food-api
 https://github.com/teamtofu/foodweb
@@ -98,7 +101,6 @@ https://github.com/asbaker/node-fda-nutrient-database
 
 http://www.lakareforframtiden.se/
 http://healthfully.org/
-
 
 ### Random
 
