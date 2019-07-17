@@ -2,11 +2,17 @@
   "name": "nordic-nutrition-recommendations",
   "version": "1.0.0",
   "description": "Selected Dietary Reference Values from the Nordic Nutrition Recommendations",
-  "main": "nnr2012.json",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JohnNilsson/nutrition.git"
   },
   "author": "John Nilsson",
-  "license": "CC0-1.0"
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "typescript": "^3.5.3"
+  }
 }
