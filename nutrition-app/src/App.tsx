@@ -7,6 +7,8 @@ import { AppState } from "./state/";
 
 import AddFoodSearch from "./components/AddFoodSearch";
 import SelectedFoods from "./components/SelectedFoods";
+import FamilyMenuItem from "./components/FamilyMenuItem";
+import FamilyMemberPopup from "./components/FamilyMemberPopup";
 import NutritionStats from "./pages/Stats";
 import NutritionTable from "./pages/Data";
 
@@ -56,6 +58,7 @@ function App({ state }: AppProps) {
                 onClick={() => go(key as Page)}
               />
             ))}
+            <FamilyMenuItem state={state} />
             <Menu.Item fitted>
               <AddFoodSearch state={state} size="small" />
             </Menu.Item>
@@ -75,6 +78,7 @@ function App({ state }: AppProps) {
           {pages[page].render(state)}
         </div>
       </div>
+      <FamilyMemberPopup state={state} />
     </React.StrictMode>
   );
 }

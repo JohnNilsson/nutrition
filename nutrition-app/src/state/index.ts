@@ -1,4 +1,6 @@
-import { types } from "mobx-state-tree";
+import { types, Instance } from "mobx-state-tree";
+import { Family } from "./Family";
+import { View } from "./View";
 
 export const NutritionalContent = types.model("NutritionalContent", {});
 
@@ -9,11 +11,13 @@ export const Food = types.model("Food", {
   ammount: types.number
 });
 
-export type Food = typeof Food.Type;
+export interface Food extends Instance<typeof Food> {}
 
 export const AppState = types
   .model({
-    foods: types.map(Food)
+    view: types.optional(View, { selectedFamilyMember: undefined }),
+    foods: types.map(Food),
+    family: types.optional(Family, { members: {} })
   })
   .actions(self => {
     return {
@@ -28,11 +32,14 @@ export const AppState = types
       },
       removeFood(id: number) {
         self.foods.delete(id as any);
+      },
+      afterCreate() {
+        self.family = Family.create();
       }
     };
   });
 
-export type AppState = typeof AppState.Type;
+export interface AppState extends Instance<typeof AppState> {}
 
 export const createAppState = () => {
   return AppState.create();

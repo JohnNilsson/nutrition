@@ -8,17 +8,16 @@ import registerServiceWorker from "./registerServiceWorker";
 import { createAppState, AppState } from "./state";
 import { onSnapshot, applySnapshot } from "mobx-state-tree";
 
-const FOODS = "foods";
 const saveSnapshot = (snapshot: any) => {
-  localStorage.setItem(FOODS, JSON.stringify(snapshot.foods));
+  localStorage.setItem("state", JSON.stringify(snapshot));
 };
 
 const loadSnapshot = (state: any) => {
-  const snapshotString = localStorage.getItem(FOODS);
+  const snapshotString = localStorage.getItem("state");
   if (snapshotString !== null) {
     const snapshot = JSON.parse(snapshotString);
     if (AppState.is(snapshot)) {
-      applySnapshot(state.foods, snapshot);
+      applySnapshot(state, snapshot);
     } else {
       console.error("Invalid snapshot found", snapshot);
     }
