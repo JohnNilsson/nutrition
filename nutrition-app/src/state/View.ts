@@ -23,7 +23,6 @@ export const View = types
   .actions(self => ({
     afterAttach() {
       self.app.family.members.observe(changes => {
-        console.log("self.app.family.members.observe", changes);
         if (changes.type === "add") {
           // TODO: For some reason newValue here isn't, as the type suggests, an instance
           // I think this code snippet, replaces the element with some internal node thingie
