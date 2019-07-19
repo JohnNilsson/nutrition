@@ -139,7 +139,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
       <Form>
         <Form.Group>
           <TextField
-            width={5}
+            width={3}
             label="Namn"
             get={() => member.name}
             set={member.setName}
@@ -166,6 +166,28 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
             get={() => member.weight}
             set={member.setWeight}
           />
+          <IntField
+            width={3}
+            label="BMI"
+            unit="kg/m²"
+            get={() => {
+              const { weight, height } = member;
+              if (weight === undefined || height === undefined) {
+                return undefined;
+              }
+              const m = height / 100;
+              return round(weight / (m * m), 1);
+            }}
+            set={bmi => {
+              const height = member.height;
+              if (bmi === undefined || height === undefined) {
+                member.setWeight(undefined);
+              } else {
+                const m = height / 100;
+                member.setWeight(round(m * m * bmi, 1));
+              }
+            }}
+          />
         </Form.Group>
         <PalField member={member} />
         <Form.Field>
@@ -183,6 +205,13 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
           <Label size="big">
             EE
             <Label.Detail>{member.dailyEnergyExpendityre} MJ/d</Label.Detail>
+          </Label>
+          <span style={{ fontSize: "2rem" }}>=</span>
+          <Label size="big">
+            EE
+            <Label.Detail>
+              {member.dailyEnergyExpendityre * 240} kcal/d
+            </Label.Detail>
           </Label>
         </Form.Field>
       </Form>
