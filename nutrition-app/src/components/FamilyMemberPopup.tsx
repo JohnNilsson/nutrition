@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Form,
@@ -7,7 +7,8 @@ import {
   Label,
   Select,
   Button,
-  Icon
+  Icon,
+  Confirm
 } from "semantic-ui-react";
 import "rc-slider/assets/index.css";
 import Slider from "rc-slider";
@@ -225,6 +226,8 @@ export interface FamilyMemberPopupProps {
 export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
   function FamilyMemberPopup({ state: { family, view } }) {
     const m = view.editFamilyMember;
+    const [confirm, setConfirm] = useState(false);
+
     return (
       <Modal open={m !== undefined} onClose={() => view.edit(undefined)}>
         {m === undefined ? null : (
@@ -233,13 +236,18 @@ export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
               {m === undefined ? null : <FamilyMemberForm member={m} />}
             </Modal.Content>
             <Modal.Actions>
-              <Button color="red" onClick={() => family.remove(m.id)}>
+              <Button color="red" onClick={() => setConfirm(true)}>
                 <Icon name="remove" /> Radera
               </Button>
               <Button color="green" onClick={() => view.edit(undefined)}>
                 <Icon name="check" /> Stäng
               </Button>
             </Modal.Actions>
+            <Confirm
+              open={confirm}
+              onCancel={() => setConfirm(false)}
+              onConfirm={() => family.remove(m.id)}
+            />
           </>
         )}
       </Modal>
