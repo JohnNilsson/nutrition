@@ -7,7 +7,6 @@ import {
   Label,
   Select,
   Button,
-  Icon,
   Confirm
 } from "semantic-ui-react";
 import "rc-slider/assets/index.css";
