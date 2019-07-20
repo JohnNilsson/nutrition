@@ -15,7 +15,7 @@ interface Result {
 interface AddFoodSearchProps extends SearchProps {
   state: AppState;
 }
-function AddFoodSearch({ state, ...props }: AddFoodSearchProps) {
+function AddFoodSearch({ state: { foods }, ...props }: AddFoodSearchProps) {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([] as Result[]);
@@ -51,7 +51,7 @@ function AddFoodSearch({ state, ...props }: AddFoodSearchProps) {
     }),
     onResultSelect: (e, d) => {
       const { id, title } = d.result as Result;
-      state.addFood(id, title);
+      foods.add(id, title);
     }
   };
   return <Search {...props} {...searchProps} />;

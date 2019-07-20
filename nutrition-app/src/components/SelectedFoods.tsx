@@ -1,6 +1,7 @@
 import React from "react";
 import { List, Icon } from "semantic-ui-react";
-import { AppState, Food } from "../state";
+import { AppState } from "../state";
+import { Food } from "../state/Foods";
 import { observer } from "mobx-react-lite";
 
 interface FoodItemProps {
@@ -26,7 +27,7 @@ interface SelectedFoodsListProps {
 }
 const SelectedFoodsList = observer<SelectedFoodsListProps>(
   function SelectedFoodsList({ state }) {
-    const foods = Array.from(state.foods.values());
+    const foods = Array.from(state.foods.selectedFoods.values());
     foods.sort(byName);
     return (
       <List>
@@ -34,7 +35,7 @@ const SelectedFoodsList = observer<SelectedFoodsListProps>(
           <FoodItem
             key={food.id}
             food={food}
-            onDelete={() => state.removeFood(food.id)}
+            onDelete={() => state.foods.remove(food.id)}
           />
         ))}
       </List>

@@ -23,7 +23,7 @@ const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
   db
 }) {
   let value = 0;
-  for (const food of state.foods.values()) {
+  for (const food of state.foods.selectedFoods.values()) {
     const nutrientValue = getNutritientValue(db, nutrient.id, food.id);
     value += (food.ammount / 100) * nutrientValue;
   }
