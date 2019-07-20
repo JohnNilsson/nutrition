@@ -229,19 +229,22 @@ export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
     const [confirm, setConfirm] = useState(false);
 
     return (
-      <Modal open={m !== undefined} onClose={() => view.edit(undefined)}>
+      <Modal
+        open={m !== undefined}
+        onClose={() => view.edit(undefined)}
+        closeIcon
+      >
         {m === undefined ? null : (
           <>
             <Modal.Content>
               {m === undefined ? null : <FamilyMemberForm member={m} />}
             </Modal.Content>
             <Modal.Actions>
-              <Button color="red" onClick={() => setConfirm(true)}>
-                <Icon name="remove" /> Radera
-              </Button>
-              <Button color="green" onClick={() => view.edit(undefined)}>
-                <Icon name="check" /> Stäng
-              </Button>
+              <Button
+                negative
+                icon="trash alternate outline"
+                onClick={() => setConfirm(true)}
+              />
             </Modal.Actions>
             <Confirm
               open={confirm}
