@@ -204,13 +204,13 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
           <span style={{ fontSize: "2rem" }}>=</span>
           <Label size="big">
             EE
-            <Label.Detail>{member.dailyEnergyExpendityre} MJ/d</Label.Detail>
+            <Label.Detail>{member.dailyEnergyExpenditure} MJ/d</Label.Detail>
           </Label>
           <span style={{ fontSize: "2rem" }}>=</span>
           <Label size="big">
             EE
             <Label.Detail>
-              {member.dailyEnergyExpendityre * 240} kcal/d
+              {member.dailyEnergyExpenditure * 240} kcal/d
             </Label.Detail>
           </Label>
         </Form.Field>

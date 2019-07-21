@@ -41,7 +41,7 @@ export const FamilyMember = types
     }
   }))
   .views(self => ({
-    get dailyEnergyExpendityre() {
+    get dailyEnergyExpenditure() {
       return self.physicalActivityLevel === undefined ||
         self.restingEnergyExpenditure === undefined
         ? 0
