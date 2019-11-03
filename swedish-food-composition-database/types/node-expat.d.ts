@@ -4,7 +4,7 @@ declare module "node-expat" {
   import { Stream } from "stream";
 
   export class Parser extends Stream {
-    parse(buf:Buffer, isFinal?: boolean): void
+    parse(buf:Buffer, isFinal?: boolean): boolean
     getError(): Error
     stop(): void
     on(event: 'error', cb: (this: this, err: Error) => void): this

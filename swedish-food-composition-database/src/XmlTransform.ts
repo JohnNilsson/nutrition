@@ -81,7 +81,7 @@ function createParser<T>(rootVisitor: Visitor<T>, context: T){
         stack.push(newFrame);
 
         if(typeof newVisitor !== 'function' && typeof newVisitor._startElement === 'function'){
-          newVisitor._startElement.call(context);
+          newVisitor._startElement.call(context, elementName);
         }
 
       } else {
@@ -106,7 +106,7 @@ function createParser<T>(rootVisitor: Visitor<T>, context: T){
       if(typeof v === 'function'){
         v.call(context, frame.elementText);
       } else if (typeof v === 'object' && typeof v._endElement === 'function'){
-        v._endElement.call(context);
+        v._endElement.call(context, elementName);
       }
     }));
 
