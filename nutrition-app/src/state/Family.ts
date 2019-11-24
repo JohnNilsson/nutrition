@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { GetRestingEnergyExpenditure } from "nordic-nutrition-recommendations";
+import { GetRestingEnergyExpenditure } from "../services/nnr";
 import { round } from "lodash-es";
 
 export const FamilyMember = types

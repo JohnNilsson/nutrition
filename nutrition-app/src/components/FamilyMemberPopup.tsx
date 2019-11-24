@@ -14,7 +14,7 @@ import Slider from "rc-slider";
 import { observer } from "mobx-react-lite";
 import { AppState } from "../state";
 import { FamilyMember } from "../state/Family";
-import { GetPhysicalActivityLevel } from "nordic-nutrition-recommendations";
+import { GetPhysicalActivityLevel } from "../services/nnr";
 import { round } from "lodash-es";
 
 interface FieldCreatorProps<T> {
