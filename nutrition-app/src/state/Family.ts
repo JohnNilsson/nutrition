@@ -37,18 +37,27 @@ export const FamilyMember = types
       const { sex, age, weight, height } = self;
       return age === undefined || weight === undefined || height === undefined
         ? undefined
-        : round(GetRestingEnergyExpenditure(sex, age, weight, height / 100), 2);
+        : round(GetRestingEnergyExpenditure(sex, age, weight, height / 100), 1);
     }
   }))
   .views(self => ({
-    get dailyEnergyExpenditure() {
+    get dailyEnergyExpenditureMJ() {
       return self.physicalActivityLevel === undefined ||
         self.restingEnergyExpenditure === undefined
-        ? 0
-        : round(self.restingEnergyExpenditure * self.physicalActivityLevel, 2);
+        ? undefined
+        : round(self.restingEnergyExpenditure * self.physicalActivityLevel, 1);
     }
-  }));
-export interface FamilyMember extends Instance<typeof FamilyMember> {}
+  }))
+  .views(self => ({
+    get dailyEnergyExpenditureKCal() {
+      return self.physicalActivityLevel === undefined ||
+        self.restingEnergyExpenditure === undefined
+        ? undefined
+        : round(self.restingEnergyExpenditure * 240 * self.physicalActivityLevel, -1);
+    }
+  }))
+  ;
+export interface FamilyMember extends Instance<typeof FamilyMember> { }
 
 export const Family = types
   .model("Family", {
@@ -85,4 +94,4 @@ export const Family = types
       self.members.delete(String(id));
     }
   }));
-export interface Family extends Instance<typeof Family> {}
+export interface Family extends Instance<typeof Family> { }
