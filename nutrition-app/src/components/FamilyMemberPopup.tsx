@@ -246,7 +246,10 @@ export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
             <Confirm
               open={confirm}
               onCancel={() => setConfirm(false)}
-              onConfirm={() => family.remove(m.id)}
+              onConfirm={() => {
+                family.remove(m.id);
+                setConfirm(false);
+              }}
             />
           </>
         )}
