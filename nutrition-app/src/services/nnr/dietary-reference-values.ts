@@ -17,6 +17,13 @@ export interface Constraint
   3: ConstraintStrength;
 }
 
+export const JoulePerKiloCal = 4184;
+export const KiloCalPerMegaJoule = 1000000/JoulePerKiloCal;
+export const KiloJoulePerGramFat = 37;
+
+export const IdealBMI = 22.5; //22-23
+export const ReferenceBMI = 23;
+
 const Constraints = {
   // Vars taken from the swedish food composition database
   // "Mfet": "Summa mättade fettsyror",
@@ -75,18 +82,18 @@ const Constraints = {
     EE: ["*", 1000, "EEMj"],
     EProt: ["*", 17, "Prot"],
     EKolh: ["*", 17, "Kolh"],
-    EFett: ["*", 37, "Fett"],
+    EFett: ["*", KiloJoulePerGramFat, "Fett"],
     EFibe: ["*", 8, "Fibe"],
     EAlko: ["*", 29, "Alko"],
-    EMfet: ["*", 37, "MFet"],
-    EMone: ["*", 37, "Mone"],
-    EPole: ["*", 37, "Pole"],
+    EMfet: ["*", KiloJoulePerGramFat, "MFet"],
+    EMone: ["*", KiloJoulePerGramFat, "Mone"],
+    EPole: ["*", KiloJoulePerGramFat, "Pole"],
     EUFA: ["+", "EMone", "EPole"],
     "n-3": ["+", "C20:5", "C22:5", "C22:6"],
-    "En-3": ["*", 37, "n-3"],
+    "En-3": ["*", KiloJoulePerGramFat, "n-3"],
     EFA: ["+", "C18:2", "C18:3"],
-    EEFA: ["*", 37, "EFA"],
-    EALA: ["*", 37, "C18:3"],
+    EEFA: ["*", KiloJoulePerGramFat, "EFA"],
+    EALA: ["*", KiloJoulePerGramFat, "C18:3"],
     ETot1: ["+", "EProt", "EFett", "EKolh"], // NNR calculation
     Etot2: ["+", "Enkj"] // Swedish Food Composition Database
   },

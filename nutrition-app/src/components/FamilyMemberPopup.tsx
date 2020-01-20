@@ -194,7 +194,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
           <label>Daglig energi förbrukning</label>
           <Label size="big">
             REE
-            <Label.Detail>{member.restingEnergyExpenditure} MJ/d</Label.Detail>
+            <Label.Detail>{member.dailyRestingEnergyExpenditureMJ} MJ/d</Label.Detail>
           </Label>
           <span style={{ fontSize: "2rem" }}>×</span>
           <Label size="big">
@@ -210,6 +210,27 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
           <Label size="big">
             EE
             <Label.Detail>{member.dailyEnergyExpenditureKCal} kcal/d</Label.Detail>
+          </Label>
+          <span style={{ fontSize: "2rem" }}>=</span>
+          <Label size="big">
+            EE
+            <Label.Detail>{member.dailyEnergyExpenditureGramFat} g<sub>fat</sub>/d</Label.Detail>
+          </Label>
+        </Form.Field>
+        <Form.Field>
+          <Label size="big">
+            Idealvikt
+            <Label.Detail>{member.idealWeightKg} kg</Label.Detail>
+          </Label>
+          <span style={{ fontSize: "2rem" }}>+</span>
+          <Label size="big">
+            Övervikt
+            <Label.Detail>{member.overWeightKg} kg</Label.Detail>
+          </Label>
+          <span style={{ fontSize: "2rem" }}>=</span>
+          <Label size="big">
+            Fasta
+            <Label.Detail>{member.overWeightFastingDays} dagar</Label.Detail>
           </Label>
         </Form.Field>
       </Form>

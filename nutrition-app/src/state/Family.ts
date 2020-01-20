@@ -1,5 +1,6 @@
 import { types, Instance } from "mobx-state-tree";
 import { GetRestingEnergyExpenditure } from "../services/nnr";
+import { KiloCalPerMegaJoule, KiloJoulePerGramFat, IdealBMI } from "../services/nnr/dietary-reference-values";
 import { round } from "lodash-es";
 
 export const FamilyMember = types
@@ -33,7 +34,21 @@ export const FamilyMember = types
     }
   }))
   .views(self => ({
-    get restingEnergyExpenditure() {
+    get idealWeightKg() {
+      const { age, weight, height } = self;
+      if (age === undefined || weight === undefined || height === undefined) {
+        return undefined;
+      }
+      if (age < 18) {
+        return weight; //TODO
+      }
+
+      const m = height / 100;
+      return round(IdealBMI * m * m, 1);
+    }
+  }))
+  .views(self => ({
+    get dailyRestingEnergyExpenditureMJ() {
       const { sex, age, weight, height } = self;
       return age === undefined || weight === undefined || height === undefined
         ? undefined
@@ -42,18 +57,42 @@ export const FamilyMember = types
   }))
   .views(self => ({
     get dailyEnergyExpenditureMJ() {
-      return self.physicalActivityLevel === undefined ||
-        self.restingEnergyExpenditure === undefined
+      const { physicalActivityLevel, dailyRestingEnergyExpenditureMJ } = self;
+      return physicalActivityLevel === undefined || dailyRestingEnergyExpenditureMJ === undefined
         ? undefined
-        : round(self.restingEnergyExpenditure * self.physicalActivityLevel, 1);
+        : round(dailyRestingEnergyExpenditureMJ * physicalActivityLevel, 1);
     }
   }))
   .views(self => ({
     get dailyEnergyExpenditureKCal() {
-      return self.physicalActivityLevel === undefined ||
-        self.restingEnergyExpenditure === undefined
+      const { dailyRestingEnergyExpenditureMJ, physicalActivityLevel } = self;
+      return dailyRestingEnergyExpenditureMJ === undefined || physicalActivityLevel === undefined
         ? undefined
-        : round(self.restingEnergyExpenditure * 240 * self.physicalActivityLevel, -1);
+        : round(dailyRestingEnergyExpenditureMJ * physicalActivityLevel * KiloCalPerMegaJoule, -1);
+    }
+  }))
+  .views(self => ({
+    get dailyEnergyExpenditureGramFat() {
+      const { dailyRestingEnergyExpenditureMJ, physicalActivityLevel } = self;
+      return dailyRestingEnergyExpenditureMJ === undefined || physicalActivityLevel === undefined
+        ? undefined
+        : round(dailyRestingEnergyExpenditureMJ * physicalActivityLevel * KiloJoulePerGramFat, 0);
+    }
+  }))
+  .views(self => ({
+    get overWeightKg() {
+      const { weight, idealWeightKg } = self;
+      return weight === undefined || idealWeightKg === undefined
+        ? undefined
+        : round(weight - idealWeightKg, 1);
+    }
+  }))
+  .views(self => ({
+    get overWeightFastingDays() {
+      const { overWeightKg, dailyEnergyExpenditureGramFat } = self;
+      return overWeightKg === undefined || dailyEnergyExpenditureGramFat === undefined
+        ? undefined
+        : round((1000 * overWeightKg) / dailyEnergyExpenditureGramFat, 0);
     }
   }))
   ;
