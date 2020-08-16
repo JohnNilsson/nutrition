@@ -10,12 +10,20 @@ import {
   Confirm
 } from "semantic-ui-react";
 import "rc-slider/assets/index.css";
-import Slider from "rc-slider";
+import { default as SliderOriginal, SliderProps } from "rc-slider/es/Slider";
 import { observer } from "mobx-react-lite";
 import { AppState } from "../state";
 import { FamilyMember } from "../state/Family";
 import { GetPhysicalActivityLevel } from "../services/nnr";
 import { round } from "lodash-es";
+
+// Workaround broken types
+const Slider = SliderOriginal as unknown as React.ComponentClass<Partial<SliderProps> & {
+  marks?: Record<number, React.ReactNode | {
+    style?: React.CSSProperties;
+    label?: string;
+  }>;
+}>;
 
 interface FieldCreatorProps<T> {
   parse(value: string | undefined): T | undefined;
