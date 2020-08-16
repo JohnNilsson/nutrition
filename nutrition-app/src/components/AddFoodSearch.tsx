@@ -15,46 +15,33 @@ interface Result {
 interface AddFoodSearchProps extends SearchProps {
   state: AppState;
 }
+
 function AddFoodSearch({ state: { foods }, ...props }: AddFoodSearchProps) {
-  const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("");
-  const [results, setResults] = useState([] as Result[]);
-
-  const searchProps: SearchProps = {
-    loading,
-    value,
-    results,
-    onSearchChange: debounce((e, d) => {
-      const query = d.value || "";
-      setValue(query);
-      if (!query) {
-        return;
-      }
-      setLoading(true);
-
-      index
-        .findAsync(query, 10)
-        .then(results => {
-          setLoading(false);
-          setResults(results.map(r => ({ id: r.id, title: r.name })));
-        })
-        .catch(err => {
-          setLoading(false);
-          setResults([
-            {
-              id: 0,
-              title: "Error",
-              description: String(err)
-            }
-          ]);
-        });
-    }),
-    onResultSelect: (e, d) => {
-      const { id, title } = d.result as Result;
-      foods.add(id, title);
-    }
-  };
-  return <Search {...props} {...searchProps} />;
+  const [state, setState] = useState(() => ({
+    query: "",
+    result: [] as Result[] | undefined
+  }));
+  return (
+    <Search
+      {...props}
+      loading={state.result === undefined}
+      value={state.query}
+      results={state.result ?? []}
+      onSearchChange={debounce((_, d: SearchProps) => {
+        const query = d.value ?? "";
+        setState({query, result: undefined});
+        index
+          .findAsync(query, 10)
+          .then(results => results.map((r) => ({ id: r.id, title: r.name })))
+          .catch(err => [{ id: 0, title: "Error", description: String(err) }])
+          .then(result => setState(prev => prev.query === query ? {query, result} : prev));
+      }, 500, {leading:true})}
+      onResultSelect={(_, d) => {
+        const { id, title } = d.result as Result;
+        foods.add(id, title);
+      }}
+    />
+  );
 }
 
 export default AddFoodSearch;
