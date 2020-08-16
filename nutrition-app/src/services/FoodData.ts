@@ -1,10 +1,10 @@
-import { Naringsvarde } from "swedish-food-composition-database";
+import { Naringsvarde } from "./sfcd";
 
 export interface Db extends Naringsvarde {}
 
 export default import(
   /* webpackPrefetch: true */
-  "swedish-food-composition-database/data/Naringsvarde.6NF.json"
+  "./sfcd/Naringsvarde.6NF.json"
 ).then(m => {
   const db = m.default;
   Object.assign(window, { db });
