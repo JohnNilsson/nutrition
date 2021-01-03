@@ -4,7 +4,9 @@ import { setNulls } from './utils';
 
 import * as data6NF from '../data/Naringsvarde.6NF.json';
 
-for(const key of Object.keys(data6NF.Livsmedel.Naringsvarde)){
+const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>;
+
+for(const key of getKeys(data6NF.Livsmedel.Naringsvarde)){
   setNulls(data6NF.Livsmedel.Naringsvarde[key].Varde,NaN);
 }
 
