@@ -22,6 +22,8 @@ interface CurrentNutrient {
   Kommentar?: string
 }
 
+const JoulePerKiloCal = 4184;
+
 // Normalize to 6NF (using array index as id)
 // TODO: Sort collections (either by frequency or alphanum, could help the compressor further)
 // Other variants to try:
@@ -126,12 +128,21 @@ const visitor: Visitor<XmlTo6NFTransform> = {
             Kommentar        (text) { this.currentNutrient!.Kommentar         = text; },
 
             _endElement() {
-              const {Namn,Forkortning,Varde,Enhet,SenastAndrad,Vardetyp,Ursprung,Publikation,Framtagningsmetod,Metodtyp,Referenstyp,Kommentar} = this.currentNutrient!;
+              let {Namn,Forkortning,Varde,Enhet,SenastAndrad,Vardetyp,Ursprung,Publikation,Framtagningsmetod,Metodtyp,Referenstyp,Kommentar} = this.currentNutrient!;
               this.currentNutrient = null;
 
               if(!(Forkortning && Namn && Enhet && Varde && SenastAndrad)){
                 throw new Error('Unexpected lack of values');
               }
+
+              if(Forkortning === 'Ener' && Namn === 'Energi (kcal)' && Enhet === 'kcal')
+              {
+                // Most values in the database is expressed as kcal integers (0-1000), but not all
+                Varde = (n(Varde) * JoulePerKiloCal / 1000.0).toFixed(0);
+                Namn  = 'Energi (kJ)';
+                Enhet = 'kJ';
+              }
+
 
               let nId = this.data.Naringsamne.Forkortning.indexOf(Forkortning);
               if(nId === -1){
@@ -144,7 +155,12 @@ const visitor: Visitor<XmlTo6NFTransform> = {
                   && this.data.Naringsamne.Namn        [nId] === Namn
                   && this.data.Naringsamne.Enhet       [nId] === Enhet
                 )){
-                  throw new Error('Unexpected value:'+JSON.stringify({Forkortning,Namn,Enhet,Vardetyp}));
+                  // Convert kcal => kJ?
+                  throw new Error('Unexpected value:'+JSON.stringify({Forkortning,Namn,Enhet})+'!=='+JSON.stringify({
+                    Forkortning: this.data.Naringsamne.Forkortning[nId],
+                    Namn: this.data.Naringsamne.Namn[nId],
+                    Enhet: this.data.Naringsamne.Enhet[nId],
+                  }));
                 };
               }
 

@@ -1,4 +1,4 @@
-VERSION     := 20171215
+VERSION     := 20200116
 BASE_URI    := http://www7.slv.se/apilivsmedel/LivsmedelService.svc/Livsmedel
 URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
