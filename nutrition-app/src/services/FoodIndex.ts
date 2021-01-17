@@ -15,7 +15,7 @@ const searchDb = (names: string[], query: string, maxResults: number) => {
 
   const match = new RegExp(escapeRegExp(query), "i");
   for (let i = 0; i < names.length; i++) {
-    const name = names[i];
+    const name = names[i]!;
     if (match.test(name)) {
       results.push({ id: i, name });
       if (results.length === maxResults) {

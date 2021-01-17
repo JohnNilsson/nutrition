@@ -9,7 +9,7 @@ export const Food = types.model("Food", {
   ammount: types.number
 });
 
-export interface Food extends Instance<typeof Food> {}
+export interface IFood extends Instance<typeof Food> {}
 
 export const Foods = types
   .model("Foods", {

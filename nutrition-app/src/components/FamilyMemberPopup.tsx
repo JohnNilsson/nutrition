@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, ComponentClass, ReactNode, CSSProperties } from "react";
 import {
   Modal,
   Form,
@@ -12,15 +12,15 @@ import {
 import "rc-slider/assets/index.css";
 import { default as SliderOriginal, SliderProps } from "rc-slider/es/Slider";
 import { observer } from "mobx-react-lite";
-import { AppState } from "../state";
-import { FamilyMember } from "../state/Family";
+import { IAppState } from "../state";
+import { IFamilyMember } from "../state/Family";
 import { GetPhysicalActivityLevel } from "../services/nnr";
 import { round } from "lodash-es";
 
 // Workaround broken types
-const Slider = SliderOriginal as unknown as React.ComponentClass<Partial<SliderProps> & {
-  marks?: Record<number, React.ReactNode | {
-    style?: React.CSSProperties;
+const Slider = SliderOriginal as unknown as ComponentClass<Partial<SliderProps> & {
+  marks?: Record<number, ReactNode | {
+    style?: CSSProperties;
     label?: string;
   }>;
 }>;
@@ -88,7 +88,7 @@ const IntField = Field<number>({
 
 interface SexFieldProps {
   width?: SemanticWIDTHS;
-  member: FamilyMember;
+  member: IFamilyMember;
 }
 const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
   return (
@@ -108,7 +108,7 @@ const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
 });
 
 interface PalFieldProps {
-  member: FamilyMember;
+  member: IFamilyMember;
 }
 const PalField = observer<PalFieldProps>(function PalField({ member }) {
   const age = member.age || 36; //Just pick something at random
@@ -139,7 +139,7 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
 });
 
 export interface FamilyMemberFormProps {
-  member: FamilyMember;
+  member: IFamilyMember;
 }
 export const FamilyMemberForm = observer<FamilyMemberFormProps>(
   function FamilyMemberForm({ member }) {
@@ -247,7 +247,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
 );
 
 export interface FamilyMemberPopupProps {
-  state: AppState;
+  state: IAppState;
 }
 export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
   function FamilyMemberPopup({ state: { family, view } }) {

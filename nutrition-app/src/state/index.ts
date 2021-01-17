@@ -9,7 +9,7 @@ export const AppState = types.model({
   family: types.optional(Family, { members: {} })
 });
 
-export interface AppState extends Instance<typeof AppState> {}
+export interface IAppState extends Instance<typeof AppState> {}
 
 export const createAppState = () => {
   return AppState.create();

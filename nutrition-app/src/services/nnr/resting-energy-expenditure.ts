@@ -17,7 +17,7 @@ const REE = {
     "31-60": [0.0476, 2.26, -0.574],
     "61+": [0.0478, 2.26, -1.07]
   }
-};
+} as const;
 
 type Sex = keyof typeof REE;
 type EEAgeRange = keyof typeof REE[Sex];

@@ -1,8 +1,7 @@
-import React from "react";
 import { observer } from "mobx-react-lite";
 import { fromPromise } from "mobx-utils";
 
-import { AppState } from "../../state";
+import { IAppState } from "../../state";
 import dbPromise, {
   Db,
   getNutritientValue,
@@ -14,7 +13,7 @@ import { round } from "lodash-es";
 
 interface NutrientStatProps {
   nutrient: Nutrient;
-  state: AppState;
+  state: IAppState;
   db: Db;
 }
 const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
@@ -42,7 +41,7 @@ const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
 });
 
 interface NutritionStatProps {
-  state: AppState;
+  state: IAppState;
   db: Db;
 }
 function NutritionStats({ state, db }: NutritionStatProps) {
@@ -60,7 +59,7 @@ function NutritionStats({ state, db }: NutritionStatProps) {
 const dbPromiseObservable = fromPromise(dbPromise);
 
 interface NutritionStatsLoaderProps {
-  state: AppState;
+  state: IAppState;
 }
 const NutritionStatsLoader = observer<NutritionStatsLoaderProps>(
   function NutritionStatsLoader({ state }) {

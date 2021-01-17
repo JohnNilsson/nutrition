@@ -1,10 +1,9 @@
-import React from "react";
 import { Menu, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import { AppState } from "../state";
+import { IAppState } from "../state";
 
 export interface FamilyMenuItemProps {
-  state: AppState;
+  state: IAppState;
 }
 export const FamilyMenuItem = observer<FamilyMenuItemProps>(
   function FamilyMenuItem({ state: { family, view } }) {

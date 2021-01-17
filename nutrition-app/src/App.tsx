@@ -1,45 +1,39 @@
-import React, { useState } from "react";
+import { StrictMode, useState } from "react";
 import { Menu } from "semantic-ui-react";
 
 import "semantic-ui-css/semantic.min.css";
 
-import { AppState } from "./state/";
+import { IAppState } from "./state/";
 
 import AddFoodSearch from "./components/AddFoodSearch";
 import SelectedFoods from "./components/SelectedFoods";
 import FamilyMenuItem from "./components/FamilyMenuItem";
 import FamilyMemberPopup from "./components/FamilyMemberPopup";
 import NutritionStats from "./pages/Stats";
-import NutritionTable from "./pages/Data";
 
 const pages = {
   stats: {
     icon: "home",
     name: "Hem",
-    render: (state: AppState) => <NutritionStats state={state} />
+    render: (state: IAppState) => <NutritionStats state={state} />
   },
   foods: {
     icon: "food",
     name: "Mat",
-    render: (state: AppState) => <div>Foods</div>
+    render: (state: IAppState) => <div>Foods</div>
   },
-  data: {
-    icon: "database",
-    name: "Data",
-    render: (state: AppState) => <NutritionTable />
-  }
 };
 
 type Page = keyof typeof pages;
 
 interface AppProps {
-  state: AppState;
+  state: IAppState;
 }
 function App({ state }: AppProps) {
   const [page, go] = useState<Page>("stats");
 
   return (
-    <React.StrictMode>
+    <StrictMode>
       <div
         className="App"
         style={{
@@ -79,7 +73,7 @@ function App({ state }: AppProps) {
         </div>
       </div>
       <FamilyMemberPopup state={state} />
-    </React.StrictMode>
+    </StrictMode>
   );
 }
 

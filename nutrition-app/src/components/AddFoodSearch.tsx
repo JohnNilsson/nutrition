@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { debounce } from "lodash-es";
 import { Search, SearchProps } from "semantic-ui-react";
 
 import index from "../services/FoodIndex";
-import { AppState } from "../state";
+import { IAppState } from "../state";
 
 // Some type gymnasitcs to get the search properties properly typed
 interface Result {
@@ -13,7 +13,7 @@ interface Result {
 }
 
 interface AddFoodSearchProps extends SearchProps {
-  state: AppState;
+  state: IAppState;
 }
 
 function AddFoodSearch({ state: { foods }, ...props }: AddFoodSearchProps) {

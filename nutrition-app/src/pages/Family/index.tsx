@@ -1,9 +1,8 @@
-import React from "react";
-import { AppState } from "../../state";
+import { IAppState } from "../../state";
 import { Button, Header, Icon, Segment, Grid } from "semantic-ui-react";
 
 export interface FamilyPageProps {
-  state: AppState;
+  state: IAppState;
 }
 export default function FamilyPage(props: FamilyPageProps) {
   return (

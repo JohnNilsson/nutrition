@@ -96,14 +96,14 @@ export const FamilyMember = types
     }
   }))
   ;
-export interface FamilyMember extends Instance<typeof FamilyMember> { }
+export interface IFamilyMember extends Instance<typeof FamilyMember> { }
 
 export const Family = types
   .model("Family", {
     members: types.map(FamilyMember)
   })
   .views(self => ({
-    get(id: number): FamilyMember {
+    get(id: number): IFamilyMember {
       const member = self.members.get(String(id));
       if (member === undefined) {
         throw new Error(`FamilyMember ${id} not found`);
@@ -133,4 +133,4 @@ export const Family = types
       self.members.delete(String(id));
     }
   }));
-export interface Family extends Instance<typeof Family> { }
+export interface IFamily extends Instance<typeof Family> { }

@@ -1,11 +1,10 @@
-import React from "react";
 import { List, Icon } from "semantic-ui-react";
-import { AppState } from "../state";
-import { Food } from "../state/Foods";
+import { IAppState } from "../state";
+import { IFood } from "../state/Foods";
 import { observer } from "mobx-react-lite";
 
 interface FoodItemProps {
-  food: Food;
+  food: IFood;
   onDelete: () => void;
 }
 const FoodItem = observer(function FoodItem({ food, onDelete }: FoodItemProps) {
@@ -20,10 +19,10 @@ const FoodItem = observer(function FoodItem({ food, onDelete }: FoodItemProps) {
   );
 });
 
-const byName = (f1: Food, f2: Food) => f1.name.localeCompare(f2.name);
+const byName = (f1: IFood, f2: IFood) => f1.name.localeCompare(f2.name);
 
 interface SelectedFoodsListProps {
-  state: AppState;
+  state: IAppState;
 }
 const SelectedFoodsList = observer<SelectedFoodsListProps>(
   function SelectedFoodsList({ state }) {

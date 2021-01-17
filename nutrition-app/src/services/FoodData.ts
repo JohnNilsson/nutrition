@@ -22,9 +22,9 @@ export const getNutritientTypes = ({ Naringsamne }: Db) => {
   const { Forkortning, Enhet, Namn } = Naringsamne;
   const nutrients: Nutrient[] = Forkortning.map((key, i) => ({
     id: i,
-    name: Namn[i],
+    name: Namn[i]!,
     abbr: key,
-    unit: Enhet[i]
+    unit: Enhet[i]!
   }));
   return nutrients;
 };
@@ -33,12 +33,12 @@ export const getNutritientValue = (
   db: Db,
   nutrientId: number,
   foodId: number
-) =>
-  db.Livsmedel.Naringsvarde[db.Naringsamne.Forkortning[nutrientId]].Varde[
+): number =>
+  db.Livsmedel.Naringsvarde[db.Naringsamne.Forkortning[nutrientId]!]!.Varde[
     foodId
-  ];
+  ]!;
 
 export const getNutritientValues = (db: Db, foodId: number) => {
   const Nutrient = db.Livsmedel.Naringsvarde;
-  return db.Naringsamne.Forkortning.map(key => Nutrient[key].Varde[foodId]);
+  return db.Naringsamne.Forkortning.map(key => Nutrient[key]!.Varde[foodId]);
 };
