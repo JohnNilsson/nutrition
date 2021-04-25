@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { fromPromise } from "mobx-utils";
 
-import { IAppState } from "../../state";
+import { AppState } from "../../state";
 import dbPromise, {
   Db,
   getNutritientValue,
@@ -13,7 +13,7 @@ import { round } from "lodash-es";
 
 interface NutrientStatProps {
   nutrient: Nutrient;
-  state: IAppState;
+  state: AppState;
   db: Db;
 }
 const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
@@ -22,9 +22,9 @@ const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
   db
 }) {
   let value = 0;
-  for (const food of state.foods.selectedFoods.values()) {
-    const nutrientValue = getNutritientValue(db, nutrient.id, food.id);
-    value += (food.ammount / 100) * nutrientValue;
+  for (const food of state.foods.values()) {
+    const nutrientValue = getNutritientValue(db, nutrient.id, Number(food.id));
+    value += (/*food.ammount*/100 / 100) * nutrientValue;
   }
   value = round(value, 2);
 
@@ -41,7 +41,7 @@ const NutrientStat = observer<NutrientStatProps>(function NutrientStat({
 });
 
 interface NutritionStatProps {
-  state: IAppState;
+  state: AppState;
   db: Db;
 }
 function NutritionStats({ state, db }: NutritionStatProps) {
@@ -59,7 +59,7 @@ function NutritionStats({ state, db }: NutritionStatProps) {
 const dbPromiseObservable = fromPromise(dbPromise);
 
 interface NutritionStatsLoaderProps {
-  state: IAppState;
+  state: AppState;
 }
 const NutritionStatsLoader = observer<NutritionStatsLoaderProps>(
   function NutritionStatsLoader({ state }) {

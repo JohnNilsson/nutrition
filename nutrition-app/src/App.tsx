@@ -3,33 +3,32 @@ import { Menu } from "semantic-ui-react";
 
 import "semantic-ui-css/semantic.min.css";
 
-import { IAppState } from "./state/";
-
 import AddFoodSearch from "./components/AddFoodSearch";
 import SelectedFoods from "./components/SelectedFoods";
 import FamilyMenuItem from "./components/FamilyMenuItem";
 import FamilyMemberPopup from "./components/FamilyMemberPopup";
 import NutritionStats from "./pages/Stats";
+import { AppState } from "./state";
 
 const pages = {
   stats: {
     icon: "home",
     name: "Hem",
-    render: (state: IAppState) => <NutritionStats state={state} />
+    render: (state: AppState) => <NutritionStats state={state} />
   },
-  foods: {
-    icon: "food",
-    name: "Mat",
-    render: (state: IAppState) => <div>Foods</div>
-  },
+  // foods: {
+  //   icon: "food",
+  //   name: "Mat",
+  //   render: (state: AppState) => <div>Foods</div>
+  // },
 };
 
 type Page = keyof typeof pages;
 
 interface AppProps {
-  state: IAppState;
+  state: AppState;
 }
-function App({ state }: AppProps) {
+const App: React.FC<AppProps> = function App({ state }) {
   const [page, go] = useState<Page>("stats");
 
   return (

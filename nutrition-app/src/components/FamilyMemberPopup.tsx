@@ -12,10 +12,11 @@ import {
 import "rc-slider/assets/index.css";
 import { default as SliderOriginal, SliderProps } from "rc-slider/es/Slider";
 import { observer } from "mobx-react-lite";
-import { IAppState } from "../state";
-import { IFamilyMember } from "../state/Family";
+import { AppState } from "../state";
+import { FamilyMember } from "../state/FamilyMember";
 import { GetPhysicalActivityLevel } from "../services/nnr";
 import { round } from "lodash-es";
+import { action } from "mobx";
 
 // Workaround broken types
 const Slider = SliderOriginal as unknown as ComponentClass<Partial<SliderProps> & {
@@ -88,7 +89,7 @@ const IntField = Field<number>({
 
 interface SexFieldProps {
   width?: SemanticWIDTHS;
-  member: IFamilyMember;
+  member: FamilyMember;
 }
 const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
   return (
@@ -101,14 +102,14 @@ const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
           { key: "F", value: "Female", text: "F" }
         ]}
         value={member.sex}
-        onChange={(e, { value }) => member.setSex(value as any)}
+        onChange={action((e, { value }) => member.sex = value as "Male" | "Female")}
       />
     </Form.Field>
   );
 });
 
 interface PalFieldProps {
-  member: IFamilyMember;
+  member: FamilyMember;
 }
 const PalField = observer<PalFieldProps>(function PalField({ member }) {
   const age = member.age || 36; //Just pick something at random
@@ -124,7 +125,7 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
   };
 
   return (
-    <Form.Field style={{ "padding-bottom": "12px" }}>
+    <Form.Field style={{ paddingBottom: "12px" }}>
       <label>Fysisk Aktivitetsnivå</label>
       <Slider
         min={min}
@@ -132,14 +133,14 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
         step={0.01}
         marks={marks}
         value={member.physicalActivityLevel}
-        onChange={member.setPhysicalActivityLevel}
+        onChange={action(v => member.physicalActivityLevel = v)}
       />
     </Form.Field>
   );
 });
 
 export interface FamilyMemberFormProps {
-  member: IFamilyMember;
+  member: FamilyMember;
 }
 export const FamilyMemberForm = observer<FamilyMemberFormProps>(
   function FamilyMemberForm({ member }) {
@@ -150,7 +151,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
             width={3}
             label="Namn"
             get={() => member.name}
-            set={member.setName}
+            set={action(v => member.name = v)}
           />
           <SexField width={2} member={member} />
           <IntField
@@ -158,21 +159,21 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
             label="Ålder"
             unit="År"
             get={() => member.age}
-            set={member.setAge}
+            set={action(v => member.age = v)}
           />
           <IntField
             width={3}
             label="Längd"
             unit="cm"
             get={() => member.height}
-            set={member.setHeight}
+            set={action(v => member.height = v)}
           />
           <IntField
             width={3}
             label="Vikt"
             unit="kg"
             get={() => member.weight}
-            set={member.setWeight}
+            set={action(v => member.weight = v)}
           />
           <IntField
             width={3}
@@ -186,15 +187,15 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
               const m = height / 100;
               return round(weight / (m * m), 1);
             }}
-            set={bmi => {
+            set={action(bmi => {
               const height = member.height;
               if (bmi === undefined || height === undefined) {
-                member.setWeight(undefined);
+                member.weight = undefined;
               } else {
                 const m = height / 100;
-                member.setWeight(round(m * m * bmi, 1));
+                member.weight = round(m * m * bmi, 1);
               }
-            }}
+            })}
           />
         </Form.Group>
         <PalField member={member} />
@@ -247,7 +248,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
 );
 
 export interface FamilyMemberPopupProps {
-  state: IAppState;
+  state: AppState;
 }
 export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
   function FamilyMemberPopup({ state: { family, view } }) {
@@ -275,10 +276,10 @@ export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
             <Confirm
               open={confirm}
               onCancel={() => setConfirm(false)}
-              onConfirm={() => {
-                family.remove(m.id);
+              onConfirm={action(() => {
+                family.delete(m.id);
                 setConfirm(false);
-              }}
+              })}
             />
           </>
         )}

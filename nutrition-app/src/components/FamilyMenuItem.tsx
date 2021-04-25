@@ -1,23 +1,30 @@
 import { Menu, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import { IAppState } from "../state";
+import { AppState } from "../state";
+import { useState } from "react";
+import { FamilyMember } from "../state/FamilyMember";
+import { action } from "mobx";
 
 export interface FamilyMenuItemProps {
-  state: IAppState;
+  state: AppState;
 }
 export const FamilyMenuItem = observer<FamilyMenuItemProps>(
-  function FamilyMenuItem({ state: { family, view } }) {
+  function FamilyMenuItem({ state }) {
+    const { family, view } = state;
+
+    const [selected, setSelected] = useState<FamilyMember|undefined>();
+
     return (
       <Menu.Item>
         <Icon name="users" />
         Familj
         <Menu.Menu>
-          {Array.from(family.members, ([key, m]) => (
+          {Array.from(family, ([key, m]) => (
             <Menu.Item
               key={key}
-              active={m === view.selectedFamilyMember}
-              onClick={() =>
-                view.select(m === view.selectedFamilyMember ? undefined : m)
+              active={m === selected}
+              onClick={() => 
+                setSelected(m === selected ? undefined : m)
               }
             >
               <Icon
@@ -30,7 +37,9 @@ export const FamilyMenuItem = observer<FamilyMenuItemProps>(
             </Menu.Item>
           ))}
           <Menu.Item>
-            <Icon float="left" name="plus" link onClick={family.add} />
+            <Icon float="left" name="plus" link onClick={action(() => {
+              setSelected(state.addFamilyMember());
+            })} />
           </Menu.Item>
         </Menu.Menu>
       </Menu.Item>

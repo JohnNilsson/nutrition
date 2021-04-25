@@ -3,7 +3,7 @@ import { debounce } from "lodash-es";
 import { Search, SearchProps } from "semantic-ui-react";
 
 import index from "../services/FoodIndex";
-import { IAppState } from "../state";
+import { AppState } from "../state";
 
 // Some type gymnasitcs to get the search properties properly typed
 interface Result {
@@ -13,32 +13,32 @@ interface Result {
 }
 
 interface AddFoodSearchProps extends SearchProps {
-  state: IAppState;
+  state: AppState;
 }
 
-function AddFoodSearch({ state: { foods }, ...props }: AddFoodSearchProps) {
-  const [state, setState] = useState(() => ({
+function AddFoodSearch({ state, ...props }: AddFoodSearchProps) {
+  const [queryState, setQueryState] = useState(() => ({
     query: "",
     result: [] as Result[] | undefined
   }));
   return (
     <Search
       {...props}
-      loading={state.result === undefined}
-      value={state.query}
-      results={state.result ?? []}
+      loading={queryState.result === undefined}
+      value={queryState.query}
+      results={queryState.result ?? []}
       onSearchChange={debounce((_, d: SearchProps) => {
         const query = d.value ?? "";
-        setState({query, result: undefined});
+        setQueryState({query, result: undefined});
         index
           .findAsync(query, 10)
           .then(results => results.map((r) => ({ id: r.id, title: r.name })))
           .catch(err => [{ id: 0, title: "Error", description: String(err) }])
-          .then(result => setState(prev => prev.query === query ? {query, result} : prev));
+          .then(result => setQueryState(prev => prev.query === query ? {query, result} : prev));
       }, 500, {leading:true})}
       onResultSelect={(_, d) => {
         const { id, title } = d.result as Result;
-        foods.add(id, title);
+        state.addFood(String(id), title);
       }}
     />
   );
