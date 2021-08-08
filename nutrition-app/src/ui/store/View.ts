@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { FamilyMember } from "./FamilyMember";
+import { FamilyMember } from "../../state/FamilyMember";
 
 export class View {
 

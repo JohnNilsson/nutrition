@@ -1,8 +1,8 @@
 import { observable, entries, makeAutoObservable } from "mobx";
 
 import { FamilyMember } from "./FamilyMember";
-import { View } from "./View";
-import { Food } from "./Foods";
+import { View } from "../ui/store/View";
+import { Food } from "./Food";
 
 import * as json from "./json"
 

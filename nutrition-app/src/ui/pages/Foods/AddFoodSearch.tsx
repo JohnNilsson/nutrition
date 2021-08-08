@@ -2,8 +2,8 @@ import { useState } from "react";
 import { debounce } from "lodash-es";
 import { Search, SearchProps } from "semantic-ui-react";
 
-import index from "../services/FoodIndex";
-import { AppState } from "../state";
+import index from "../../../services/FoodIndex";
+import {useAppState } from "../../store";
 
 // Some type gymnasitcs to get the search properties properly typed
 interface Result {
@@ -12,11 +12,8 @@ interface Result {
   description?: string;
 }
 
-interface AddFoodSearchProps extends SearchProps {
-  state: AppState;
-}
-
-function AddFoodSearch({ state, ...props }: AddFoodSearchProps) {
+function AddFoodSearch({ ...props }: SearchProps) {
+  const state = useAppState();
   const [queryState, setQueryState] = useState(() => ({
     query: "",
     result: [] as Result[] | undefined

@@ -1,22 +1,11 @@
-import { useState, ComponentClass, ReactNode, CSSProperties } from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  SemanticWIDTHS,
-  Label,
-  Select,
-  Button,
-  Confirm
-} from "semantic-ui-react";
-import "rc-slider/assets/index.css";
-import { default as SliderOriginal, SliderProps } from "rc-slider/es/Slider";
-import { observer } from "mobx-react-lite";
-import { AppState } from "../state";
-import { FamilyMember } from "../state/FamilyMember";
-import { GetPhysicalActivityLevel } from "../services/nnr";
 import { round } from "lodash-es";
 import { action } from "mobx";
+import { observer } from "mobx-react-lite";
+import { default as SliderOriginal, SliderProps } from "rc-slider/es/Slider";
+import { ComponentClass, CSSProperties, ReactNode } from "react";
+import { Form, Input, Label, Select, SemanticWIDTHS } from "semantic-ui-react";
+import { GetPhysicalActivityLevel } from "../../../services/nnr";
+import { FamilyMember } from "../../../state/FamilyMember";
 
 // Workaround broken types
 const Slider = SliderOriginal as unknown as ComponentClass<Partial<SliderProps> & {
@@ -139,6 +128,7 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
   );
 });
 
+
 export interface FamilyMemberFormProps {
   member: FamilyMember;
 }
@@ -246,45 +236,3 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
     );
   }
 );
-
-export interface FamilyMemberPopupProps {
-  state: AppState;
-}
-export const FamilyMemberPopup = observer<FamilyMemberPopupProps>(
-  function FamilyMemberPopup({ state: { family, view } }) {
-    const m = view.editFamilyMember;
-    const [confirm, setConfirm] = useState(false);
-
-    return (
-      <Modal
-        open={m !== undefined}
-        onClose={() => view.edit(undefined)}
-        closeIcon
-      >
-        {m === undefined ? null : (
-          <>
-            <Modal.Content>
-              {m === undefined ? null : <FamilyMemberForm member={m} />}
-            </Modal.Content>
-            <Modal.Actions>
-              <Button
-                negative
-                icon="trash alternate outline"
-                onClick={() => setConfirm(true)}
-              />
-            </Modal.Actions>
-            <Confirm
-              open={confirm}
-              onCancel={() => setConfirm(false)}
-              onConfirm={action(() => {
-                family.delete(m.id);
-                setConfirm(false);
-              })}
-            />
-          </>
-        )}
-      </Modal>
-    );
-  }
-);
-export default FamilyMemberPopup;

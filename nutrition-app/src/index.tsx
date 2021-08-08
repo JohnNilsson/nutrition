@@ -1,13 +1,15 @@
 import "./services/FoodData"; // Start loading the data in the background
 
-import { autorun, configure, toJS } from "mobx";
-
+import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 
-import { AppState } from "./state";
+import { autorun, configure } from "mobx";
+
+import App from "./ui/App";
+import { AppState } from "./ui/store";
 import * as stateJson from "./state/json"
+import { AppStateContext } from "./ui/store";
 
 configure({
   enforceActions: "always",
@@ -34,5 +36,11 @@ autorun(() => {
   localStorage.setItem("state", JSON.stringify(state));
 });
 
-ReactDOM.render(<App state={state} />, document.getElementById("root"));
+ReactDOM.render(
+  <React.StrictMode>
+    <AppStateContext.Provider value={state}>
+      <App />
+    </AppStateContext.Provider>
+  </React.StrictMode>,
+  document.getElementById("root"));
 registerServiceWorker();

@@ -1,6 +1,6 @@
 import { List, Icon } from "semantic-ui-react";
-import { AppState } from "../state";
-import { Food } from "../state/Foods";
+import { useAppState } from "../../store";
+import { Food } from "../../../state/Food";
 import { observer } from "mobx-react-lite";
 
 interface FoodItemProps {
@@ -21,11 +21,9 @@ const FoodItem = function FoodItem({ food, onDelete }: FoodItemProps) {
 
 const byName = (f1: Food, f2: Food) => (f1.name ?? "").localeCompare(f2.name ?? "");
 
-interface SelectedFoodsListProps {
-  state: AppState;
-}
-const SelectedFoodsList = observer<SelectedFoodsListProps>(
-  function SelectedFoodsList({ state }) {
+const SelectedFoodsList = observer(
+  function SelectedFoodsList() {
+    const state = useAppState();
     const foods = Array.from(state.foods.values());
     foods.sort(byName);
     return (
