@@ -18,7 +18,7 @@ export interface Constraint
 }
 
 export const JoulePerKiloCal = 4184;
-export const KiloCalPerMegaJoule = 1000000/JoulePerKiloCal;
+export const KiloCalPerMegaJoule = 1000000 / JoulePerKiloCal;
 export const KiloJoulePerGramFat = 37;
 
 export const IdealBMI = 22.5; //22-23
@@ -95,7 +95,7 @@ const Constraints = {
     EEFA: ["*", KiloJoulePerGramFat, "EFA"],
     EALA: ["*", KiloJoulePerGramFat, "C18:3"],
     ETot1: ["+", "EProt", "EFett", "EKolh"], // NNR calculation
-    Etot2: ["+", "Enkj"] // Swedish Food Composition Database
+    Etot2: ["+", "Enkj"], // Swedish Food Composition Database
   },
   Recommendations: [
     //
@@ -144,17 +144,17 @@ const Constraints = {
       // Children: An intake corresponding to 2–3 g/MJ is appropriate for children from 2 years of age. From school age the intake should gradually increase to reach the recommended adult level during adolescence.
       "2-6": [
         ["Fibe", ">=", ["*", 0.002, "EE"], "medium"],
-        ["Fibe", "<=", ["*", 0.003, "EE"], "medium"]
+        ["Fibe", "<=", ["*", 0.003, "EE"], "medium"],
       ],
       "7-17": [
         [
           "Fibe",
           ">=",
           ["*", ["+", 0.002, ["*", 0.0001, "Age"]], "EE"],
-          "medium"
+          "medium",
         ],
-        ["Fibe", "<=", ["*", 0.003, "EE"], "weak"]
-      ]
+        ["Fibe", "<=", ["*", 0.003, "EE"], "weak"],
+      ],
     },
 
     // Based  on  the  available  evidence,  and  according  to  the  Nordic  dietary  habits, a protein intake corresponding to 10–20 E% is recommended. Thus, the recommended range is the same as in NNR 2004.
@@ -169,20 +169,20 @@ const Constraints = {
       // The recommendations for protein intake in children in the NNR 2012 are the same as in the NNR 2004, i.e. 7–15 E% from 6 to 11 months of age,  10–15  E%  for  12  to  23  months  of  age,  and  10–20  E%  for  2  to  17  years of age.
       // The fol-lowing upper ranges for protein intake are suggested, assuming sufficient intake of other nutrients: 0–6 months, 10 E%; 6–11 months, 15 E%; 12–23 months, 17 E%; and 2 years and older, 20 E%.
       "0-1": [
-        ["EProt", "<=", ["*", ["+", 0.1, ["*", 0.1, "Age"]], "EE"], "strong"]
+        ["EProt", "<=", ["*", ["+", 0.1, ["*", 0.1, "Age"]], "EE"], "strong"],
       ],
       "2-64": [
         // For food planning purposes with energy intake in the range of 8–12 MJ,  an  appropriate  target  is  15  E%
         ["EProt", ">=", ["*", 0.15, "EE"], "weak"],
-        ["EProt", "<=", ["*", 0.15, "EE"], "weak"]
+        ["EProt", "<=", ["*", 0.15, "EE"], "weak"],
       ],
       "65+": [
         // an intake corresponding to 15–20 E% is recommended for the elderly.
         ["EProt", ">=", ["*", 0.15, "EE"], "strong"],
         // For food planning purposes, the recommendation is 18 E%, which corresponds to about 1.2 g protein/kg BW/d.
         ["EProt", ">=", ["*", 0.18, "EE"], "weak"],
-        ["EProt", "<=", ["*", 0.18, "EE"], "weak"]
-      ]
-    }
-  ]
+        ["EProt", "<=", ["*", 0.18, "EE"], "weak"],
+      ],
+    },
+  ],
 };

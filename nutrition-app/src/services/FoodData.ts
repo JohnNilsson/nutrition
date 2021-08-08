@@ -5,7 +5,7 @@ export interface Db extends Naringsvarde {}
 export default import(
   /* webpackPrefetch: true */
   "./sfcd/Naringsvarde.6NF.json"
-).then(m => {
+).then((m) => {
   const db = m.default;
   Object.assign(window, { db });
   return db as Db;
@@ -24,7 +24,7 @@ export const getNutritientTypes = ({ Naringsamne }: Db) => {
     id: i,
     name: Namn[i]!,
     abbr: key,
-    unit: Enhet[i]!
+    unit: Enhet[i]!,
   }));
   return nutrients;
 };
@@ -40,5 +40,5 @@ export const getNutritientValue = (
 
 export const getNutritientValues = (db: Db, foodId: number) => {
   const Nutrient = db.Livsmedel.Naringsvarde;
-  return db.Naringsamne.Forkortning.map(key => Nutrient[key]!.Varde[foodId]);
+  return db.Naringsamne.Forkortning.map((key) => Nutrient[key]!.Varde[foodId]);
 };

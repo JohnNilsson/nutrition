@@ -6,14 +6,12 @@ import dbPromise from "../../../../services/FoodData";
 
 const dbPromiseObservable = fromPromise(dbPromise);
 
-const NutritionStatsLoader = observer(
-  function NutritionStatsLoader() {
-    return dbPromiseObservable.case({
-      fulfilled: db => <NutritionStats db={db} />,
-      pending: () => <div>Loading...</div>,
-      rejected: err => <div>{err.message}</div>
-    });
-  }
-);
+const NutritionStatsLoader = observer(function NutritionStatsLoader() {
+  return dbPromiseObservable.case({
+    fulfilled: (db) => <NutritionStats db={db} />,
+    pending: () => <div>Loading...</div>,
+    rejected: (err) => <div>{err.message}</div>,
+  });
+});
 
 export default NutritionStatsLoader;

@@ -8,7 +8,7 @@ import { autorun, configure } from "mobx";
 
 import App from "./ui/App";
 import { AppState } from "./ui/store";
-import * as stateJson from "./state/json"
+import * as stateJson from "./state/json";
 import { AppStateContext } from "./ui/store";
 
 configure({
@@ -31,7 +31,6 @@ function loadSnapshot(appState: AppState) {
 const state = new AppState();
 loadSnapshot(state);
 
-
 autorun(() => {
   localStorage.setItem("state", JSON.stringify(state));
 });
@@ -42,5 +41,6 @@ ReactDOM.render(
       <App />
     </AppStateContext.Provider>
   </React.StrictMode>,
-  document.getElementById("root"));
+  document.getElementById("root")
+);
 registerServiceWorker();

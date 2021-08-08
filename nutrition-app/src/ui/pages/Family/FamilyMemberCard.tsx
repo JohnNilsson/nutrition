@@ -12,9 +12,8 @@ export interface FamilyMemberCardProps {
 }
 export const FamilyMemberCard = observer<FamilyMemberCardProps>(
   function FamilyMemberCard({ member }) {
-
     const { family } = useAppState();
-    const [ confirm, setConfirm ] = useState(false);
+    const [confirm, setConfirm] = useState(false);
 
     return (
       <Card fluid>

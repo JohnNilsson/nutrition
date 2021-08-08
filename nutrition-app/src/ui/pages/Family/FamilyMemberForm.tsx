@@ -8,12 +8,18 @@ import { GetPhysicalActivityLevel } from "../../../services/nnr";
 import { FamilyMember } from "../../../state/FamilyMember";
 
 // Workaround broken types
-const Slider = SliderOriginal as unknown as ComponentClass<Partial<SliderProps> & {
-  marks?: Record<number, ReactNode | {
-    style?: CSSProperties;
-    label?: string;
-  }>;
-}>;
+const Slider = (SliderOriginal as unknown) as ComponentClass<
+  Partial<SliderProps> & {
+    marks?: Record<
+      number,
+      | ReactNode
+      | {
+          style?: CSSProperties;
+          label?: string;
+        }
+    >;
+  }
+>;
 
 interface FieldCreatorProps<T> {
   parse(value: string | undefined): T | undefined;
@@ -33,7 +39,7 @@ function Field<T>({ format, parse }: FieldCreatorProps<T>) {
     width,
     unit,
     get,
-    set
+    set,
   }: FieldProps<T>) {
     return (
       <Form.Field width={width}>
@@ -44,7 +50,7 @@ function Field<T>({ format, parse }: FieldCreatorProps<T>) {
           label={unit ? { basic: true, content: unit } : undefined}
           labelPosition={unit ? "right" : undefined}
           value={format(get())}
-          onChange={e => {
+          onChange={(e) => {
             const newValue = parse(e.target.value);
             if (newValue !== undefined) {
               set(newValue);
@@ -57,13 +63,13 @@ function Field<T>({ format, parse }: FieldCreatorProps<T>) {
 }
 
 const TextField = Field<string>({
-  format: v => v,
-  parse: v => v
+  format: (v) => v,
+  parse: (v) => v,
 });
 
 const IntField = Field<number>({
-  format: v => (v === undefined ? undefined : String(v)),
-  parse: v => {
+  format: (v) => (v === undefined ? undefined : String(v)),
+  parse: (v) => {
     if (v === undefined) {
       return undefined;
     }
@@ -73,7 +79,7 @@ const IntField = Field<number>({
     } else {
       return undefined;
     }
-  }
+  },
 });
 
 interface SexFieldProps {
@@ -88,10 +94,12 @@ const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
         fluid
         options={[
           { key: "M", value: "Male", text: "M" },
-          { key: "F", value: "Female", text: "F" }
+          { key: "F", value: "Female", text: "F" },
         ]}
         value={member.sex}
-        onChange={action((e, { value }) => member.sex = value as "Male" | "Female")}
+        onChange={action(
+          (e, { value }) => (member.sex = value as "Male" | "Female")
+        )}
       />
     </Form.Field>
   );
@@ -110,7 +118,7 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
   const marks = {
     [low]: "Låg",
     [avg]: "Medel",
-    [high]: "Hög"
+    [high]: "Hög",
   };
 
   return (
@@ -122,12 +130,11 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
         step={0.01}
         marks={marks}
         value={member.physicalActivityLevel}
-        onChange={action(v => member.physicalActivityLevel = v)}
+        onChange={action((v) => (member.physicalActivityLevel = v))}
       />
     </Form.Field>
   );
 });
-
 
 export interface FamilyMemberFormProps {
   member: FamilyMember;
@@ -141,7 +148,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
             width={3}
             label="Namn"
             get={() => member.name}
-            set={action(v => member.name = v)}
+            set={action((v) => (member.name = v))}
           />
           <SexField width={2} member={member} />
           <IntField
@@ -149,21 +156,21 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
             label="Ålder"
             unit="År"
             get={() => member.age}
-            set={action(v => member.age = v)}
+            set={action((v) => (member.age = v))}
           />
           <IntField
             width={3}
             label="Längd"
             unit="cm"
             get={() => member.height}
-            set={action(v => member.height = v)}
+            set={action((v) => (member.height = v))}
           />
           <IntField
             width={3}
             label="Vikt"
             unit="kg"
             get={() => member.weight}
-            set={action(v => member.weight = v)}
+            set={action((v) => (member.weight = v))}
           />
           <IntField
             width={3}
@@ -177,7 +184,7 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
               const m = height / 100;
               return round(weight / (m * m), 1);
             }}
-            set={action(bmi => {
+            set={action((bmi) => {
               const height = member.height;
               if (bmi === undefined || height === undefined) {
                 member.weight = undefined;
@@ -193,7 +200,9 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
           <label>Daglig energi förbrukning</label>
           <Label size="big">
             REE
-            <Label.Detail>{member.dailyRestingEnergyExpenditureMJ} MJ/d</Label.Detail>
+            <Label.Detail>
+              {member.dailyRestingEnergyExpenditureMJ} MJ/d
+            </Label.Detail>
           </Label>
           <span style={{ fontSize: "2rem" }}>×</span>
           <Label size="big">
@@ -208,12 +217,16 @@ export const FamilyMemberForm = observer<FamilyMemberFormProps>(
           <span style={{ fontSize: "2rem" }}>=</span>
           <Label size="big">
             EE
-            <Label.Detail>{member.dailyEnergyExpenditureKCal} kcal/d</Label.Detail>
+            <Label.Detail>
+              {member.dailyEnergyExpenditureKCal} kcal/d
+            </Label.Detail>
           </Label>
           <span style={{ fontSize: "2rem" }}>=</span>
           <Label size="big">
             EE
-            <Label.Detail>{member.dailyEnergyExpenditureGramFat} g<sub>fat</sub>/d</Label.Detail>
+            <Label.Detail>
+              {member.dailyEnergyExpenditureGramFat} g<sub>fat</sub>/d
+            </Label.Detail>
           </Label>
         </Form.Field>
         <Form.Field>

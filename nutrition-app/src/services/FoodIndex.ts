@@ -30,7 +30,7 @@ const index: Index = {
   async findAsync(query: string, maxResult?: number) {
     const db = await dbPromise;
     return searchDb(db.Livsmedel.Namn, query, maxResult || 10);
-  }
+  },
 };
 
 export default index;

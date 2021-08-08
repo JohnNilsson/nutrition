@@ -1,19 +1,23 @@
 import { GetRestingEnergyExpenditure } from "../services/nnr";
-import { KiloCalPerMegaJoule, KiloJoulePerGramFat, IdealBMI } from "../services/nnr/dietary-reference-values";
+import {
+  KiloCalPerMegaJoule,
+  KiloJoulePerGramFat,
+  IdealBMI,
+} from "../services/nnr/dietary-reference-values";
 import { round } from "lodash-es";
 import { makeAutoObservable } from "mobx";
 
 export class FamilyMember {
-  public name?: string
-  public sex?: "Male" | "Female"
-  public age?: number
-  public height?: number
-  public weight?: number
-  public physicalActivityLevel?: number
+  public name?: string;
+  public sex?: "Male" | "Female";
+  public age?: number;
+  public height?: number;
+  public weight?: number;
+  public physicalActivityLevel?: number;
 
-  constructor(
-    public readonly id: string
-  ) { makeAutoObservable(this); }
+  constructor(public readonly id: string) {
+    makeAutoObservable(this);
+  }
 
   get idealWeightKg() {
     const { age, weight, height } = this;
@@ -30,30 +34,46 @@ export class FamilyMember {
 
   get dailyRestingEnergyExpenditureMJ() {
     const { sex, age, weight, height } = this;
-    return sex === undefined || age === undefined || weight === undefined || height === undefined
+    return sex === undefined ||
+      age === undefined ||
+      weight === undefined ||
+      height === undefined
       ? undefined
       : round(GetRestingEnergyExpenditure(sex, age, weight, height / 100), 1);
   }
 
   get dailyEnergyExpenditureMJ() {
     const { physicalActivityLevel, dailyRestingEnergyExpenditureMJ } = this;
-    return physicalActivityLevel === undefined || dailyRestingEnergyExpenditureMJ === undefined
+    return physicalActivityLevel === undefined ||
+      dailyRestingEnergyExpenditureMJ === undefined
       ? undefined
       : round(dailyRestingEnergyExpenditureMJ * physicalActivityLevel, 1);
   }
 
   get dailyEnergyExpenditureKCal() {
     const { dailyRestingEnergyExpenditureMJ, physicalActivityLevel } = this;
-    return dailyRestingEnergyExpenditureMJ === undefined || physicalActivityLevel === undefined
+    return dailyRestingEnergyExpenditureMJ === undefined ||
+      physicalActivityLevel === undefined
       ? undefined
-      : round(dailyRestingEnergyExpenditureMJ * physicalActivityLevel * KiloCalPerMegaJoule, -1);
+      : round(
+          dailyRestingEnergyExpenditureMJ *
+            physicalActivityLevel *
+            KiloCalPerMegaJoule,
+          -1
+        );
   }
 
   get dailyEnergyExpenditureGramFat() {
     const { dailyRestingEnergyExpenditureMJ, physicalActivityLevel } = this;
-    return dailyRestingEnergyExpenditureMJ === undefined || physicalActivityLevel === undefined
+    return dailyRestingEnergyExpenditureMJ === undefined ||
+      physicalActivityLevel === undefined
       ? undefined
-      : round(dailyRestingEnergyExpenditureMJ * physicalActivityLevel * KiloJoulePerGramFat, 0);
+      : round(
+          dailyRestingEnergyExpenditureMJ *
+            physicalActivityLevel *
+            KiloJoulePerGramFat,
+          0
+        );
   }
 
   get overWeightKg() {
@@ -65,7 +85,8 @@ export class FamilyMember {
 
   get overWeightFastingDays() {
     const { overWeightKg, dailyEnergyExpenditureGramFat } = this;
-    return overWeightKg === undefined || dailyEnergyExpenditureGramFat === undefined
+    return overWeightKg === undefined ||
+      dailyEnergyExpenditureGramFat === undefined
       ? undefined
       : round((1000 * overWeightKg) / dailyEnergyExpenditureGramFat, 0);
   }

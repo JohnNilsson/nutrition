@@ -14,30 +14,29 @@ const FoodItem = function FoodItem({ food, onDelete }: FoodItemProps) {
         <Icon link name="delete" onClick={onDelete} />
         {food.name}
       </List.Header>
-      {/*food.ammount*/100} g
+      {/*food.ammount*/ 100} g
     </List.Item>
   );
 };
 
-const byName = (f1: Food, f2: Food) => (f1.name ?? "").localeCompare(f2.name ?? "");
+const byName = (f1: Food, f2: Food) =>
+  (f1.name ?? "").localeCompare(f2.name ?? "");
 
-const SelectedFoodsList = observer(
-  function SelectedFoodsList() {
-    const state = useAppState();
-    const foods = Array.from(state.foods.values());
-    foods.sort(byName);
-    return (
-      <List>
-        {foods.map(food => (
-          <FoodItem
-            key={food.id}
-            food={food}
-            onDelete={() => state.foods.delete(food.id)}
-          />
-        ))}
-      </List>
-    );
-  }
-);
+const SelectedFoodsList = observer(function SelectedFoodsList() {
+  const state = useAppState();
+  const foods = Array.from(state.foods.values());
+  foods.sort(byName);
+  return (
+    <List>
+      {foods.map((food) => (
+        <FoodItem
+          key={food.id}
+          food={food}
+          onDelete={() => state.foods.delete(food.id)}
+        />
+      ))}
+    </List>
+  );
+});
 
 export default SelectedFoodsList;

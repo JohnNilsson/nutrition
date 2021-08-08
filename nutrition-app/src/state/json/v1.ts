@@ -1,7 +1,7 @@
 export type AppStateJson = {
-  view?: ViewStateJson
-  foods?: FoodsStateJson
-  family?: FamilyStateJson
+  view?: ViewStateJson;
+  foods?: FoodsStateJson;
+  family?: FamilyStateJson;
 };
 
 export type ViewStateJson = {
@@ -10,25 +10,25 @@ export type ViewStateJson = {
 
 export type FoodsStateJson = {
   selectedFoods?: {
-    [id: string] : {
-      id?: number,
-      name?: string,
-      nutrients?: {},
-      ammount?: number
-    }
-  }
+    [id: string]: {
+      id?: number;
+      name?: string;
+      nutrients?: {};
+      ammount?: number;
+    };
+  };
 };
 
 export type FamilyStateJson = {
   members?: {
-    [id: string] : {
-      id?: number,
-      name?: string,
-      sex?: "Male" | "Female",
-      age?: number,
-      height?: number,
-      weight?: number,
-      physicalActivityLevel?: number
-    }
-  }
+    [id: string]: {
+      id?: number;
+      name?: string;
+      sex?: "Male" | "Female";
+      age?: number;
+      height?: number;
+      weight?: number;
+      physicalActivityLevel?: number;
+    };
+  };
 };
