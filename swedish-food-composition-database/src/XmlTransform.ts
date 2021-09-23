@@ -19,7 +19,7 @@ abstract class XmlTransform<T> extends Transform {
 
   protected abstract createVisitorState(): T
 
-  constructor(visitor: Visitor<T>, streamOptions: TransformOptions) {
+  constructor(visitor: Visitor<T>, streamOptions?: TransformOptions) {
     super(streamOptions);
     this.parser = createParser(visitor,this.createVisitorState());
     this._error = null;
@@ -32,7 +32,9 @@ abstract class XmlTransform<T> extends Transform {
         this._error = this.parser.getError() || new Error('Parse failed');
       }
     } catch (e) {
-      this._error = e;
+      if(e instanceof Error) {
+        this._error = e;
+      }
     }
 
     if(this._error === null){

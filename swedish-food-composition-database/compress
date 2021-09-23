@@ -3,12 +3,16 @@
 const algorithms = {
 
   brotli() {
-    const compress = require('iltorb').compressStream({
-      mode:      1 /*UTF-8 formatted text input*/,
-      quality:   11 /*max*/,
-      lgwin:     24 /*max*/,
-      lgblock:   24 /*max*/,
-      size_hint: require('fs').fstatSync(process.stdin.fd).size,
+    const zlib = require('zlib');
+    const b = zlib.constants;
+    const compress = zlib.createBrotliCompress({
+      chunkSize: 64 * 1024,
+      params: {
+        [zlib.constants.BROTLI_PARAM_MODE]:      zlib.constants.BROTLI_MODE_TEXT,
+        [zlib.constants.BROTLI_PARAM_QUALITY]:   zlib.constants.BROTLI_MAX_QUALITY,
+        [zlib.constants.BROTLI_PARAM_LGWIN]:     zlib.constants.BROTLI_MAX_WINDOW_BITS,
+        [zlib.constants.BROTLI_PARAM_SIZE_HINT]: require('fs').fstatSync(process.stdin.fd).size,
+      }
     });
     process.stdin
       .pipe(compress)
