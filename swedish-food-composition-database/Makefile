@@ -1,4 +1,4 @@
-VERSION     := 20200116
+VERSION     := 20210503
 BASE_URI    := http://www7.slv.se/apilivsmedel/LivsmedelService.svc/Livsmedel
 URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
@@ -15,7 +15,7 @@ COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach file,$(TOCOMPRESS) $
 PATH  := .:$(shell npm bin):$(PATH)
 SHELL := /bin/bash
 
-all: npm_install $(COMPRESSED)
+all: npm_install $(TRANSFORMED)
 
 $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
