@@ -2,8 +2,8 @@ VERSION     := 20210503
 BASE_URI    := http://www7.slv.se/apilivsmedel/LivsmedelService.svc/Livsmedel
 URI         := $(BASE_URI)/Naringsvarde/$(VERSION)
 XML         := data/Naringsvarde.xml
-TRANSFORMS  := 6NF
-TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform).json)
+TRANSFORMS  := 6NF.json sql
+TRANSFORMED := $(foreach transform,$(TRANSFORMS),data/Naringsvarde.$(transform))
 TOCOMPRESS  := $(TRANSFORMED)
 COMPRESSION := brotli
 COMPRESSED  := $(foreach algorithm,$(COMPRESSION),$(foreach file,$(TOCOMPRESS) $(XML),$(file).$(algorithm)))
@@ -21,7 +21,7 @@ $(COMPRESSED): $$(basename $$@)
 	@mkdir -p $(@D)
 	compress $(subst .,,$(suffix $@)) < $< > $@
 
-$(TRANSFORMED): data/Naringsvarde.%.json: $(XML)
+$(TRANSFORMED): data/Naringsvarde.%: $(XML)
 	@mkdir -p $(@D)
 	transform $* < $< > $@
 
