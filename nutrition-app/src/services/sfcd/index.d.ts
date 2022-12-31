@@ -1,1 +1,0 @@
-../../../../swedish-food-composition-database/index.d.ts

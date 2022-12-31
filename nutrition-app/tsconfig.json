@@ -1,24 +1,15 @@
 {
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "target": "es2018",
-    "allowJs": true,
-    "skipLibCheck": false,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "isolatedModules": true,
-    "useDefineForClassFields": true,
-    "noEmit": true,
+    //"allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

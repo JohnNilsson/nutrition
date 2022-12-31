@@ -1,10 +1,10 @@
-import { Naringsvarde } from "./sfcd";
+import type { Naringsvarde } from "sfcd";
 
 export interface Db extends Naringsvarde {}
 
 export default import(
   /* webpackPrefetch: true */
-  "./sfcd/Naringsvarde.6NF.json"
+  "sfcd/data/Naringsvarde.6NF.json"
 ).then((m) => {
   const db = m.default;
   Object.assign(window, { db });

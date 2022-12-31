@@ -15,55 +15,25 @@
     "react-dom": "^17.0.2",
     "react-window": "^1.8.6",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.3"
+    "semantic-ui-react": "^2.0.3",
+    "sfcd": "file:../swedish-food-composition-database"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "deploy": "yarn run build && gh-pages -d build",
+    "esbuild": "esbuild src/index.tsx --splitting --format=esm --loader:.png=file --loader:.woff=file --loader:.svg=file --loader:.eot=file --loader:.woff2=file --loader:.ttf=file",
+    "build": "npm run esbuild -- --outdir=public --bundle",
+    "start": "npm run esbuild -- --servedir=public --outdir=public --bundle",
+    "deploy": "npm run build && gh-pages -d build",
     "prettier": "prettier --write 'public/**/*.html' 'src/**/*.[tj]s{x,}'"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/preset-react": "^7.14.5",
-    "@babel/preset-typescript": "^7.15.0",
-    "@types/jest": "^27.0.1",
+    "@tsconfig/strictest": "^1.0.2",
     "@types/lodash-es": "^4.17.4",
-    "@types/node": "^16.7.5",
     "@types/react": "^17.0.16",
     "@types/react-dom": "^17.0.9",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
-    "fibers": "^5.0.0",
+    "esbuild": "^0.16.12",
     "gh-pages": "^3.2.3",
-    "react-scripts": "^4.0.3",
     "typescript": "^4.4.2"
-  },
-  "resolutions": {
-    "ssri": ">=8.0.1"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-typescript",
-      "@babel/preset-react"
-    ]
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(lodash-es|rc-slider/es|rc-util/es|@babel/runtime/helpers/esm)/.*)"
-    ],
-    "moduleNameMapper": {
-      "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "<rootDir>/tests/stub"
-    }
   }
 }
