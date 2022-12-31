@@ -2,7 +2,6 @@ import "./services/FoodData"; // Start loading the data in the background
 
 import React from "react";
 import ReactDOM from "react-dom";
-import registerServiceWorker from "./registerServiceWorker";
 
 import { autorun, configure } from "mobx";
 
@@ -43,4 +42,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-registerServiceWorker();
