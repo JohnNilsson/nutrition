@@ -5,7 +5,6 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "isolatedModules": true,
-    //"allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"]

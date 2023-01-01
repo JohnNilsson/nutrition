@@ -8,7 +8,7 @@ export default observer(function FamilyPage() {
 
   const cards = [];
   for (const member of state.family.values()) {
-    cards.push(<FamilyMemberCard member={member} />);
+    cards.push(<FamilyMemberCard key={member.id} member={member} />);
   }
 
   return (

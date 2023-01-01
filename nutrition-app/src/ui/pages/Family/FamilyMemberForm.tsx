@@ -1,25 +1,10 @@
 import { round } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { default as SliderOriginal, SliderProps } from "rc-slider/es/Slider";
-import { ComponentClass, CSSProperties, ReactNode } from "react";
+import Slider from "rc-slider/es/Slider";
 import { Form, Input, Label, Select, SemanticWIDTHS } from "semantic-ui-react";
 import { GetPhysicalActivityLevel } from "../../../services/nnr";
-import { FamilyMember } from "../../../state/FamilyMember";
-
-// Workaround broken types
-const Slider = (SliderOriginal as unknown) as ComponentClass<
-  Partial<SliderProps> & {
-    marks?: Record<
-      number,
-      | ReactNode
-      | {
-          style?: CSSProperties;
-          label?: string;
-        }
-    >;
-  }
->;
+import type { FamilyMember } from "../../../state/FamilyMember";
 
 interface FieldCreatorProps<T> {
   parse(value: string | undefined): T | undefined;
@@ -42,13 +27,13 @@ function Field<T>({ format, parse }: FieldCreatorProps<T>) {
     set,
   }: FieldProps<T>) {
     return (
-      <Form.Field width={width}>
+      <Form.Field width={width!}>
         <label>{label}</label>
         <Input
           autoComplete="off"
           placeholder={label}
           label={unit ? { basic: true, content: unit } : undefined}
-          labelPosition={unit ? "right" : undefined}
+          labelPosition={unit ? "right" : undefined!}
           value={format(get())}
           onChange={(e) => {
             const newValue = parse(e.target.value);
@@ -88,7 +73,7 @@ interface SexFieldProps {
 }
 const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
   return (
-    <Form.Field width={width}>
+    <Form.Field width={width!}>
       <label>Kön</label>
       <Select
         fluid
@@ -96,9 +81,9 @@ const SexField = observer<SexFieldProps>(function SexField({ width, member }) {
           { key: "M", value: "Male", text: "M" },
           { key: "F", value: "Female", text: "F" },
         ]}
-        value={member.sex}
+        value={member.sex!}
         onChange={action(
-          (e, { value }) => (member.sex = value as "Male" | "Female")
+          (_, { value }) => (member.sex = value as "Male" | "Female")
         )}
       />
     </Form.Field>
@@ -129,8 +114,8 @@ const PalField = observer<PalFieldProps>(function PalField({ member }) {
         max={max}
         step={0.01}
         marks={marks}
-        value={member.physicalActivityLevel}
-        onChange={action((v) => (member.physicalActivityLevel = v))}
+        value={member.physicalActivityLevel!}
+        onChange={action((v) => (member.physicalActivityLevel = v as number))}
       />
     </Form.Field>
   );

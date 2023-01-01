@@ -8,12 +8,12 @@ import { round } from "lodash-es";
 import { makeAutoObservable } from "mobx";
 
 export class FamilyMember {
-  public name?: string;
-  public sex?: "Male" | "Female";
-  public age?: number;
-  public height?: number;
-  public weight?: number;
-  public physicalActivityLevel?: number;
+  public name: string | undefined;
+  public sex: "Male" | "Female" | undefined;
+  public age: number | undefined;
+  public height: number | undefined;
+  public weight: number | undefined;
+  public physicalActivityLevel: number | undefined;
 
   constructor(public readonly id: string) {
     makeAutoObservable(this);

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
 import { Button, Confirm, Card } from "semantic-ui-react";
-import { FamilyMember } from "../../../state/FamilyMember";
+import type { FamilyMember } from "../../../state/FamilyMember";
 import { useAppState } from "../../store";
 import { FamilyMemberForm } from "./FamilyMemberForm";
 

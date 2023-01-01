@@ -1,7 +1,7 @@
 import "./services/FoodData"; // Start loading the data in the background
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 
 import { autorun, configure } from "mobx";
 
@@ -34,11 +34,10 @@ autorun(() => {
   localStorage.setItem("state", JSON.stringify(state));
 });
 
-ReactDOM.render(
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AppStateContext.Provider value={state}>
       <App />
     </AppStateContext.Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

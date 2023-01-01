@@ -2,9 +2,9 @@ import { observable, entries, makeAutoObservable } from "mobx";
 
 import { FamilyMember } from "./FamilyMember";
 import { View } from "../ui/store/View";
-import { Food } from "./Food";
+import type { Food } from "./Food";
 
-import * as json from "./json";
+import type * as json from "./json";
 
 export class AppState {
   public readonly foods = observable.map<string, Food>(undefined, {

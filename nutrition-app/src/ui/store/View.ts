@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { FamilyMember } from "../../state/FamilyMember";
+import type { FamilyMember } from "../../state/FamilyMember";
 
 export class View {
   public editFamilyMember?: FamilyMember;
@@ -9,6 +9,6 @@ export class View {
   }
 
   edit(member: FamilyMember | undefined) {
-    this.editFamilyMember = member;
+    this.editFamilyMember = member!;
   }
 }

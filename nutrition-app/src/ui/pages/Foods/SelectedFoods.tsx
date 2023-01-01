@@ -1,6 +1,6 @@
 import { List, Icon } from "semantic-ui-react";
 import { useAppState } from "../../store";
-import { Food } from "../../../state/Food";
+import type { Food } from "../../../state/Food";
 import { observer } from "mobx-react-lite";
 
 interface FoodItemProps {
