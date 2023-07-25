@@ -97,6 +97,12 @@ https://github.com/teamtofu/foodweb
 https://github.com/eliashussary/nutrition-facts
 https://github.com/asbaker/node-fda-nutrient-database
 
+WHO recommended the foodDB in EU obesity 2022 report https://apps.who.int/iris/bitstream/handle/10665/353747/9789289057738-eng.pdf
+https://www.ndph.ox.ac.uk/food-ncd/archive/research-projects/fooddb-and-myshop
+foodDB data is freely available for non-commercial use. To request access to foodDB data or for more information please send an email to foodDBaccess@ndph.ox.ac.uk
+
+Also https://foodb.ca/ (https://en.wikipedia.org/wiki/FooDB) could be a good information source of nutrients, and potential health effects
+
 ### Nutrition
 
 http://www.lakareforframtiden.se/
@@ -111,3 +117,9 @@ http://www.langual.org/
 http://www.langual.org/download/Presentation/LanguaLpresentation%202015-10-04.pdf
 https://github.com/monarch-initiative/SEPIO-ontology
 https://github.com/FoodOntology/foodon
+
+#### A recipie to Nutri-score app
+
+Write recipiet in recipie lang (syntx highlight, autocomplete)
+Compute nutrient content using fooddb or such
+Compuate nutri-score to rate
