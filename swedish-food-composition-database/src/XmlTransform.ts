@@ -26,7 +26,7 @@ abstract class XmlTransform<T> extends Transform {
     this.parser.on('error', err => this._error = err);
   }
 
-  _transform(chunk: Buffer, encoding: string, callback: TransformCallback){
+  override _transform(chunk: Buffer, encoding: string, callback: TransformCallback){
     try {
       if (!this.parser.parse(chunk)) {
         this._error = this.parser.getError() || new Error('Parse failed');
@@ -69,7 +69,7 @@ function createParser<T>(rootVisitor: Visitor<T>, context: T){
     console.error('');
 
     p.on('startElement', safe(elementName => {
-      const oldFrame   = stack[stack.length-1];
+      const oldFrame   = stack[stack.length-1]!;
       const curVisitor = oldFrame.visitor as VisitorObj<T>;
       const newVisitor = curVisitor[elementName];
 
@@ -82,8 +82,8 @@ function createParser<T>(rootVisitor: Visitor<T>, context: T){
 
         stack.push(newFrame);
 
-        if(typeof newVisitor !== 'function' && typeof newVisitor._startElement === 'function'){
-          newVisitor._startElement.call(context, elementName);
+        if(typeof newVisitor !== 'function' && typeof newVisitor['_startElement'] === 'function'){
+          newVisitor["_startElement"].call(context, elementName);
         }
 
       } else {
@@ -93,7 +93,7 @@ function createParser<T>(rootVisitor: Visitor<T>, context: T){
     }));
 
     p.on('text', safe(text => {
-      const frame = stack[stack.length-1];
+      const frame = stack[stack.length-1]!;
       if(typeof frame.visitor === 'function'){
         frame.elementText += text;
       } else {
@@ -107,8 +107,8 @@ function createParser<T>(rootVisitor: Visitor<T>, context: T){
       const v = frame.visitor;
       if(typeof v === 'function'){
         v.call(context, frame.elementText);
-      } else if (typeof v === 'object' && typeof v._endElement === 'function'){
-        v._endElement.call(context, elementName);
+      } else if (typeof v === 'object' && typeof v['_endElement'] === 'function'){
+        v['_endElement'].call(context, elementName);
       }
     }));
 

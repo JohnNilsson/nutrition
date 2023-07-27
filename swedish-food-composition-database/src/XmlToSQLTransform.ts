@@ -1,6 +1,4 @@
-import XmlTransform, { Visitor } from './XmlTransform'
-import { setNulls, n, d, id, sortByFkFrequency } from './utils'
-import { Naringsvarde } from ".."
+import XmlTransform, { Visitor } from './XmlTransform.js'
 
 interface CurrentFood {
   Nummer?: string

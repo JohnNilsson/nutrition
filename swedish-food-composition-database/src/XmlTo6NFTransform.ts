@@ -1,6 +1,6 @@
-import XmlTransform, { Visitor } from './XmlTransform'
-import { setNulls, n, d, id, sortByFkFrequency } from './utils'
-import { Naringsvarde } from "../"
+import XmlTransform, { Visitor } from './XmlTransform.js'
+import { setNulls, n, d, id, sortByFkFrequency } from './utils.js'
+import type { NäringsvärdeJson, NäringsvärdeFörkortning } from "../data/Naringsvarde.6NF.json"; 
 
 interface CurrentFood {
   id: number
@@ -9,7 +9,7 @@ interface CurrentFood {
 
 interface CurrentNutrient {
   Namn?: string
-  Forkortning?: string
+  Forkortning?: NäringsvärdeFörkortning
   Varde?: string
   Enhet?: string
   SenastAndrad?: string
@@ -33,7 +33,7 @@ const JoulePerKiloCal = 4184;
 
 export default class XmlTo6NFTransform extends XmlTransform<XmlTo6NFTransform> {
 
-  public data: Naringsvarde
+  public data: NäringsvärdeJson
   public currentFood: CurrentFood | null
   public currentNutrient: CurrentNutrient | null;
 
@@ -57,7 +57,7 @@ export default class XmlTo6NFTransform extends XmlTransform<XmlTo6NFTransform> {
         Nummer : [],
         Namn : [],
         Grupp: [],
-        Naringsvarde: {},
+        Naringsvarde: {} as any,
       },
       Naringsamne: {
         Namn       : [],
@@ -115,7 +115,7 @@ const visitor: Visitor<XmlTo6NFTransform> = {
             },
 
             Namn             (text) { this.currentNutrient!.Namn              = text; },
-            Forkortning      (text) { this.currentNutrient!.Forkortning       = text; },
+            Forkortning      (text) { this.currentNutrient!.Forkortning       = text as NäringsvärdeFörkortning; },
             Varde            (text) { this.currentNutrient!.Varde             = text; },
             Enhet            (text) { this.currentNutrient!.Enhet             = text; },
             SenastAndrad     (text) { this.currentNutrient!.SenastAndrad      = text; },

@@ -5,5 +5,5 @@
     "typescript",
     "typescriptreact"
   ],
-  "liveServer.settings.multiRootWorkspaceName": "nutrition"
+  "prettier.requirePragma": true
 }
