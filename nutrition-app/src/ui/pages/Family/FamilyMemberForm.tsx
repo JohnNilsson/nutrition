@@ -2,7 +2,13 @@ import { round } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import Slider from "rc-slider/es/Slider";
-import { Form, Input, Label, Select, SemanticWIDTHS } from "semantic-ui-react";
+import {
+  Form,
+  Input,
+  Label,
+  Select,
+  type SemanticWIDTHS,
+} from "semantic-ui-react";
 import { GetPhysicalActivityLevel } from "../../../services/nnr";
 import type { FamilyMember } from "../../../state/FamilyMember";
 

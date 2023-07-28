@@ -1,13 +1,13 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/create-react-app/tsconfig.json",
+    "@tsconfig/esm/tsconfig.json"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext"]
+    "noEmit": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

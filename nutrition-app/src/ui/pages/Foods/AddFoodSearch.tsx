@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { debounce } from "lodash-es";
-import { Search, SearchProps } from "semantic-ui-react";
+import { Search, type SearchProps } from "semantic-ui-react";
 
 import index from "../../../services/FoodIndex";
 import { useAppState } from "../../store";

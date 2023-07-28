@@ -1,15 +1,31 @@
-import type { Naringsvarde } from "sfcd";
+import type { NäringsvärdeJson } from "sfcd/data.json";
 
-export interface Db extends Naringsvarde {}
+export interface Db extends NäringsvärdeJson {}
 
 export default import(
   /* webpackPrefetch: true */
-  "sfcd/data/Naringsvarde.6NF.json"
+  "sfcd/data.json"
 ).then((m) => {
   const db = m.default;
   Object.assign(window, { db });
-  return db as Db;
+  return new FoodData(db);
 });
+
+export class FoodData {
+  constructor(public db: Db) {}
+  getNutritientTypes() {
+    return getNutritientTypes(this.db);
+  }
+  getNutritientValue(nutrientId: number, foodId: number) {
+    return getNutritientValue(this.db, nutrientId, foodId);
+  }
+  getNutritientValues(foodId: number) {
+    return getNutritientValues(this.db, foodId);
+  }
+  getFoodNames() {
+    return this.db.Livsmedel.Namn;
+  }
+}
 
 export interface Nutrient {
   id: number;

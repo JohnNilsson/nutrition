@@ -5,35 +5,39 @@
   "license": "UNLICENSED",
   "private": true,
   "homepage": "http://JohnNilsson.github.io/nutrition",
+  "type": "module",
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "mobx": "^6.7.0",
-    "mobx-react-lite": "^3.4.0",
-    "mobx-utils": "^6.0.5",
-    "rc-slider": "^10.1.0",
+    "mobx": "^6.10.0",
+    "mobx-react-lite": "^4.0.3",
+    "mobx-utils": "^6.0.8",
+    "rc-slider": "^10.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-window": "^1.8.8",
+    "react-window": "^1.8.9",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
     "sfcd": "file:../swedish-food-composition-database"
   },
   "scripts": {
-    "esbuild": "esbuild src/index.tsx --splitting --format=esm --loader:.png=file --loader:.woff=file --loader:.svg=file --loader:.eot=file --loader:.woff2=file --loader:.ttf=file",
+    "esbuild": "esbuild src/index.tsx --splitting --format=esm --jsx=automatic --loader:.png=file --loader:.woff=file --loader:.svg=file --loader:.eot=file --loader:.woff2=file --loader:.ttf=file",
     "build": "npm run esbuild -- --outdir=public --bundle",
     "start": "npm run esbuild -- --servedir=public --outdir=public --bundle",
     "deploy": "npm run build && gh-pages -d build",
-    "prettier": "prettier --write 'public/**/*.html' 'src/**/*.[tj]s{x,}'"
+    "prettier": "prettier --write 'public/**/*.html' 'src/**/*.[tj]s{x,}'",
+    "check-types": "tsc --noEmit src/index.tsx"
   },
   "devDependencies": {
-    "@tsconfig/strictest": "^1.0.2",
-    "@types/lodash-es": "^4.17.6",
-    "@types/react": "^18.0.26",
-    "@types/react-dom": "^18.0.10",
+    "@tsconfig/create-react-app": "^2.0.1",
+    "@tsconfig/esm": "^1.0.4",
+    "@tsconfig/strictest": "^2.0.1",
+    "@types/lodash-es": "^4.17.8",
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
-    "esbuild": "^0.16.12",
-    "gh-pages": "^4.0.0",
-    "typescript": "^4.9.4"
+    "esbuild": "^0.18.17",
+    "gh-pages": "^5.0.0",
+    "typescript": "^5.1.6"
   }
 }
