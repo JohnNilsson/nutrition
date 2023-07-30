@@ -4,5 +4,6 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "rust-analyzer.linkedProjects": ["meal-planner/src-tauri/Cargo.toml"]
 }
